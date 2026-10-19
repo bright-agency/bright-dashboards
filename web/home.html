@@ -60,13 +60,17 @@ button{font:inherit}
 .toast.on{opacity:1}
 @media (max-width:900px){.tot{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:560px){.wrap{padding:0 14px}.grid{grid-template-columns:1fr}.bar input{min-width:0;flex:1}}
+.pwbox{position:relative}.gate .pwbox input{padding-inline-start:44px;padding-inline-end:44px}
+.gate .eye{position:absolute;inset-inline-start:6px;top:50%;transform:translateY(-50%);width:34px;height:34px;border:0;background:transparent;cursor:pointer;color:#7A7A72;display:grid;place-items:center;border-radius:8px;margin:0;padding:0}
+.gate .eye:hover{background:#F4F4F2;color:#141B34}.gate .eye svg{width:20px;height:20px}
+[hidden]{display:none!important}
 </style>
 </head>
 <body>
 <div class="toast" id="toast"></div>
 <div class="gate" id="gate"><form id="gateForm" autocomplete="off">
   <img src="../assets/bright-logo.png" alt="BRIGHT"><h2>BRIGHT · צוות</h2><p>כל הלקוחות במקום אחד</p>
-  <input type="password" id="pw" placeholder="סיסמה" aria-label="סיסמה" autocomplete="current-password">
+  <div class="pwbox"><input type="password" id="pw" placeholder="סיסמה" aria-label="סיסמה" autocomplete="current-password"><button type="button" class="eye" id="eye" aria-label="הצגת הסיסמה" title="הצגת הסיסמה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
   <button type="submit" id="go">כניסה</button><div class="err" id="err"></div></form></div>
 <header class="mast"><div class="wrap"><div class="top">
   <div class="brand"><img src="../assets/bright-logo.png" alt=""><div><div class="eyebrow">BRIGHT · דשבורד צוות</div><h1>כל הלקוחות</h1></div></div>
@@ -154,6 +158,13 @@ function render(){
   $('grid').querySelectorAll('[data-copy]').forEach(b => b.onclick = async () => {
     try { await navigator.clipboard.writeText(b.dataset.copy); toast('הלינק הועתק – אפשר לשלוח ללקוח'); } catch(e){ prompt('העתיקו את הלינק:', b.dataset.copy); } });
 }
+
+(function(){ const e = document.getElementById('eye'), p = document.getElementById('pw'); if (!e || !p) return;
+  const open = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const shut = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 19C5 19 1 12 1 12a18.5 18.5 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 7 11 7a18.5 18.5 0 0 1-2.16 3.19M14.12 14.12a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg>';
+  e.onclick = () => { const show = p.type === 'password'; p.type = show ? 'text' : 'password'; e.innerHTML = show ? shut : open;
+    e.setAttribute('aria-label', show ? 'הסתרת הסיסמה' : 'הצגת הסיסמה'); e.title = e.getAttribute('aria-label'); p.focus(); };
+})();
 boot();
 </script>
 </body>

@@ -227,6 +227,10 @@ tfoot td{font-weight:800;background:#EEF0F4!important;border-top:2px solid #D9DC
   tbody tr:nth-child(even) td,tbody td.n:nth-child(even){background:none}
 }
 @media print{.mast{padding-bottom:30px}main{margin-top:16px}.periods{display:none}.card{box-shadow:none}}
+.cmp{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:#B9BCCB}
+.cmp button{border:1px solid rgba(255,255,255,.2);background:transparent;color:#DDE0EA;padding:4px 12px;border-radius:999px;font:inherit;font-size:13px;cursor:pointer}
+.cmp button.on{background:#fff;color:var(--navy);border-color:#fff;font-weight:700}
+[hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -260,6 +264,7 @@ tfoot td{font-weight:800;background:#EEF0F4!important;border-top:2px solid #D9DC
       </div>
     </div>
     <div class="range" id="rangeTxt"></div>
+    <div class="cmp" id="cmp"></div>
   </div>
 </header>
 
@@ -356,6 +361,30 @@ function parseCampaign(raw){
   return {name: name.replace(/\(\s*\)/g,'').trim(), tags};
 }
 
+
+/* ---------- comparison period: previous period / same dates one month (quarter) earlier ---------- */
+function shiftM(s, m){
+  const [y, mo, d] = s.split('-').map(Number);
+  const last = (yy, mm) => new Date(Date.UTC(yy, mm, 0)).getUTCDate();          // mm = 1..12
+  const t = new Date(Date.UTC(y, mo - 1 + m, 1)), ty = t.getUTCFullYear(), tm = t.getUTCMonth() + 1;
+  const day = d === last(y, mo) ? last(ty, tm) : Math.min(d, last(ty, tm));       // month end -> month end
+  return `${ty}-${String(tm).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+}
+function cmpRange(a, b, key){
+  const months = key === 'lastQuarter' ? 3 : 1;
+  if (CMP.mode === 'same') return [shiftM(a, -months), shiftM(b, -months)];
+  if (key === 'lastMonth' || key === 'lastQuarter') return [shiftM(a, -months), addDays(a, -1)];
+  const n = days(a, b); return [addDays(a, -n), addDays(a, -1)];
+}
+const CMP = {mode: 'prev'};
+try { const m = localStorage.getItem('bright-cmp'); if (m === 'same' || m === 'prev') CMP.mode = m; } catch(e){}
+function cmpToggle(onChange){
+  const el = document.getElementById('cmp'); if (!el) return;
+  el.innerHTML = `<span>השוואה ל:</span>${[['prev','תקופה קודמת'],['same','אותם ימים בחודש הקודם']].map(([k,l]) =>
+    `<button type="button" class="${CMP.mode===k?'on':''}" data-m="${k}">${l}</button>`).join('')}`;
+  el.querySelectorAll('button').forEach(b => b.onclick = () => { CMP.mode = b.dataset.m;
+    try { localStorage.setItem('bright-cmp', CMP.mode); } catch(e){} onChange(); });
+}
 const range = () => state.key === 'custom' ? [state.from, state.to] : DATA.presets[state.key];
 function presetKey(){
   if (state.key !== 'custom') return state.key;
@@ -380,11 +409,8 @@ function delta(cur, prev, inverse){
 
 function render(){
   const [a,b] = range();
-  const n = days(a,b);
-  let pa = addDays(a,-n), pb = addDays(a,-1);
-  if (state.key === 'lastMonth' || state.key === 'lastQuarter'){
-    const d = new Date(a+'T00:00:00Z'); d.setUTCMonth(d.getUTCMonth() - (state.key==='lastMonth'?1:3)); pa = iso(d);
-  }
+  const n = days(a,b), [pa, pb] = cmpRange(a, b, state.key);
+  cmpToggle(render);
   const cur = DATA.rows.filter(inRange(a,b)), prev = DATA.rows.filter(inRange(pa,pb));
   const T = agg(cur), P = agg(prev);
   const by = Object.fromEntries(PL.map(p => [p, agg(cur.filter(r=>r.p===p))]));
@@ -417,7 +443,7 @@ function render(){
     <div class="card kpi ${c.hero?'hero':''}">
       <div class="lbl">${c.lbl}</div>
       <div class="val num">${c.val}</div>
-      <div class="sub">${c.d||''}${c.d?'<span>לעומת תקופה קודמת</span>':''}${c.sub?`<span>${c.sub}</span>`:''}</div>
+      <div class="sub">${c.d||''}${c.d?`<span>${CMP.mode==='same'?'לעומת אותם ימים בחודש הקודם':'לעומת תקופה קודמת'}</span>`:''}${c.sub?`<span>${c.sub}</span>`:''}</div>
       ${c.extra||''}
     </div>`).join('');
 
