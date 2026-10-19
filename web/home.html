@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>BRIGHT · כל הלקוחות</title>
+<link rel="icon" href="../assets/bright-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F4F2;--ink:#141B34;--mute:#6E6E73;--mute-2:#7A7A72;--hair:#E4E4E0;--hair-2:#ECECE8;--navy:#141B34;--yellow:#FBDD5C;--yellow-soft:#FDF8E6;--yellow-2:#FDF3C7;
+  --good:#1F9D57;--good-bg:#D8F0E2;--bad:#D64545;--bad-bg:#FBE6E6;--shadow:0 1px 0 rgba(20,27,52,.03),0 10px 28px -14px rgba(20,27,52,.18)}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Assistant,Arial,sans-serif;font-size:15px;line-height:1.5}
+.wrap{max-width:1360px;margin:0 auto;padding:0 28px}.num{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+button{font:inherit}
+.gate{position:fixed;inset:0;background:var(--navy);display:grid;place-items:center;z-index:50;padding:20px}
+.gate form{background:#fff;border-radius:20px;padding:30px 28px;width:100%;max-width:380px;text-align:center;border-top:5px solid var(--yellow)}
+.gate img{width:56px;height:56px;border-radius:50%}.gate h2{margin:12px 0 2px;font-size:22px;font-weight:800}.gate p{margin:0 0 18px;color:var(--mute);font-size:14px}
+.gate input{width:100%;font:inherit;font-size:16px;padding:11px 14px;border:1px solid var(--hair);border-radius:12px;text-align:center}
+.gate button{margin-top:12px;width:100%;padding:11px;border:0;border-radius:12px;background:var(--navy);color:#fff;font-weight:700;font-size:16px;cursor:pointer}
+.gate .err{color:var(--bad);font-size:13.5px;min-height:20px;margin-top:8px}.gate.hide{display:none}
+.mast{background:var(--navy);color:#E9EAF0;padding:22px 0 26px;position:relative}
+.mast::after{content:"";position:absolute;inset:auto 0 0 0;height:4px;background:var(--yellow)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:14px}.brand img{width:44px;height:44px;border-radius:50%;box-shadow:0 0 0 2px var(--yellow)}
+.brand .eyebrow{color:var(--yellow);font-size:13px;font-weight:700}.brand h1{margin:0;font-size:26px;font-weight:800;color:#fff}
+.upd{color:#B9BCCB;font-size:13px}.upd b{color:#fff}
+.lock{background:transparent;border:1px solid rgba(255,255,255,.25);color:#DDE0EA;border-radius:999px;padding:4px 12px;font-size:12.5px;cursor:pointer;margin-inline-start:8px}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:22px 0 14px}
+.bar input{font:inherit;font-size:14.5px;padding:8px 14px;border-radius:12px;border:1px solid var(--hair);min-width:220px;background:#fff}
+.seg{display:inline-flex;background:#fff;border:1px solid var(--hair);border-radius:12px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--mute);font-weight:600;font-size:14px}
+.seg button.on{background:var(--navy);color:#fff}
+.sys{margin:16px 0 0;display:grid;gap:8px}
+.sys div{background:#fff;color:var(--ink);border:1px solid var(--hair);border-inline-start:5px solid var(--bad);border-radius:12px;padding:10px 14px;font-weight:600}
+.sys div.med{border-inline-start-color:#E9B824}
+.tot{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:4px}
+.card{background:#fff;border-radius:16px;box-shadow:var(--shadow);border:1px solid var(--hair)}
+.tot .card{padding:14px 16px}.tot span{display:block;font-size:12.5px;color:var(--mute-2);font-weight:600}.tot b{font-size:24px;font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;padding-bottom:50px}
+.cl{padding:16px 18px;display:flex;flex-direction:column;gap:10px;position:relative}
+.cl.hi{border-top:4px solid var(--bad)}.cl.me{border-top:4px solid #E9B824}
+.cl h3{margin:0;font-size:18px;font-weight:800;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.cl .sub{font-size:12.5px;color:var(--mute-2);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.pill{font-size:11.5px;font-weight:700;padding:1px 9px;border-radius:999px;background:var(--hair-2);color:var(--mute)}
+.pill.paused{background:var(--yellow-2);color:#8A6400}.pill.stale{background:var(--bad-bg);color:var(--bad)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;border-top:1px solid var(--hair-2);border-bottom:1px solid var(--hair-2);padding:10px 0}
+.stats span{display:block;font-size:11.5px;color:var(--mute-2);font-weight:600}.stats b{font-size:17px;font-weight:800}
+.stats small{display:block;font-size:11.5px;color:var(--mute-2)}
+.al{font-size:13px;color:var(--bad);margin:0;padding-inline-start:18px}.al li{margin:2px 0}
+.cnt{display:flex;gap:6px}.cnt span{font-size:12px;font-weight:800;padding:1px 8px;border-radius:999px}
+.cnt .h{background:var(--bad-bg);color:var(--bad)}.cnt .m{background:var(--yellow-2);color:#8A6400}.cnt .ok{background:var(--good-bg);color:var(--good)}
+.act{display:flex;gap:8px;flex-wrap:wrap}
+.act a,.act button{font-size:13px;font-weight:700;text-decoration:none;border-radius:10px;padding:6px 12px;border:1px solid #D9DCE6;background:#fff;color:var(--navy);cursor:pointer}
+.act a.pri{background:var(--navy);color:#fff;border-color:var(--navy)}.act button:hover,.act a:hover{border-color:var(--navy)}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 18px;border-radius:12px;font-weight:600;opacity:0;transition:opacity .2s;pointer-events:none;border-top:3px solid var(--yellow)}
+.toast.on{opacity:1}
+@media (max-width:900px){.tot{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.wrap{padding:0 14px}.grid{grid-template-columns:1fr}.bar input{min-width:0;flex:1}}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div class="gate" id="gate"><form id="gateForm" autocomplete="off">
+  <img src="../assets/bright-logo.png" alt="BRIGHT"><h2>BRIGHT · צוות</h2><p>כל הלקוחות במקום אחד</p>
+  <input type="password" id="pw" placeholder="סיסמה" aria-label="סיסמה" autocomplete="current-password">
+  <button type="submit" id="go">כניסה</button><div class="err" id="err"></div></form></div>
+<header class="mast"><div class="wrap"><div class="top">
+  <div class="brand"><img src="../assets/bright-logo.png" alt=""><div><div class="eyebrow">BRIGHT · דשבורד צוות</div><h1>כל הלקוחות</h1></div></div>
+  <div class="upd">עודכן <b id="gen" class="num">—</b><button class="lock" id="lock">נעילה</button></div>
+</div><div class="sys" id="sys"></div></div></header>
+<main class="wrap" id="app" hidden>
+  <div class="bar"><input id="q" type="search" placeholder="חיפוש לקוח…" aria-label="חיפוש לקוח">
+    <div class="seg" id="sortSeg"></div><div class="seg" id="perSeg"></div></div>
+  <div class="tot" id="tot"></div>
+  <h2 style="font-size:20px;margin:24px 2px 12px">לקוחות</h2>
+  <div class="grid" id="grid"></div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const nf = new Intl.NumberFormat('he-IL');
+const ils = v => '₪' + nf.format(Math.round(v||0)), int = v => nf.format(Math.round(v||0));
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fdate = s => { if (!s) return '—'; const [y,m,d] = s.slice(0,10).split('-'); return `${+d}.${+m}`; };
+let H, state = {q:'', sort:'alerts', per:'d7'};
+try { Object.assign(state, JSON.parse(localStorage.getItem('bright-home') || '{}')); } catch(e){}
+
+async function decrypt(enc, pw){
+  const b = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  const km = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({name:'PBKDF2', salt:b(enc.salt), iterations:enc.iter, hash:'SHA-256'}, km, {name:'AES-GCM', length:256}, false, ['decrypt']);
+  const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv:b(enc.iv)}, key, b(enc.ct));
+  return await new Response(new Blob([pt]).stream().pipeThrough(new DecompressionStream('gzip'))).json();
+}
+async function boot(){
+  if (['localhost','127.0.0.1'].includes(location.hostname)){
+    try { const r = await fetch('home.dev.json?v='+Date.now()); if (r.ok) return start(await r.json()); } catch(e){}
+  }
+  let enc; try { enc = await (await fetch('home.enc.json?v='+Date.now())).json(); } catch(e){ $('err').textContent = 'הנתונים עדיין לא זמינים.'; return; }
+  const tryPw = async pw => { try { const d = await decrypt(enc, pw); try { sessionStorage.setItem('bright-team', pw); } catch(e){} start(d); return true; } catch(e){ return false; } };
+  let saved = null; try { saved = sessionStorage.getItem('bright-team'); } catch(e){}
+  if (saved && await tryPw(saved)) return;
+  $('pw').focus();
+  $('gateForm').onsubmit = async e => { e.preventDefault(); $('go').disabled = true; $('go').textContent = 'פותח…';
+    const ok = await tryPw($('pw').value); $('go').disabled = false; $('go').textContent = 'כניסה';
+    if (!ok){ $('err').textContent = 'סיסמה שגויה'; $('pw').select(); } };
+}
+$('lock').onclick = () => { try { sessionStorage.removeItem('bright-team'); } catch(e){} location.reload(); };
+function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2500); }
+
+function start(h){
+  H = h; $('gate').classList.add('hide'); $('app').hidden = false;
+  $('gen').textContent = new Date(h.generated).toLocaleString('he-IL',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jerusalem'});
+  $('sys').innerHTML = (h.alerts || []).map(a => `<div class="${a.sev}">🔑 ${esc(a.msg)}</div>`).join('');
+  $('q').value = state.q; $('q').oninput = () => { state.q = $('q').value; render(); };
+  render();
+}
+function seg(id, opts, key){
+  $(id).innerHTML = opts.map(([k,l]) => `<button class="${state[key]===k?'on':''}" data-k="${k}">${l}</button>`).join('');
+  $(id).querySelectorAll('button').forEach(b => b.onclick = () => { state[key] = b.dataset.k; render(); });
+}
+function render(){
+  try { localStorage.setItem('bright-home', JSON.stringify({sort:state.sort, per:state.per})); } catch(e){}
+  seg('sortSeg', [['alerts','לפי התראות'],['spend','לפי הוצאה'],['name','א-ב']], 'sort');
+  seg('perSeg', [['d7','7 ימים'],['d30','30 ימים']], 'per');
+  const ilToday = new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Jerusalem'}).format(new Date());
+  const y = new Date(ilToday + 'T00:00:00Z'); y.setUTCDate(y.getUTCDate() - 1); const yday = y.toISOString().slice(0,10);
+  let list = H.clients.filter(c => !state.q || (c.name || '').includes(state.q) || (c.slug || '').includes(state.q.toLowerCase()));
+  const P = state.per, S = c => (c[P] || {}).s || 0, A = c => (c.alerts || {});
+  list.sort(state.sort === 'name' ? (a,b) => a.name.localeCompare(b.name,'he')
+    : state.sort === 'spend' ? (a,b) => S(b) - S(a)
+    : (a,b) => ((A(b).high||0) - (A(a).high||0)) || ((A(b).med||0) - (A(a).med||0)) || S(b) - S(a));
+  const T = H.clients.reduce((t,c) => (t.s += S(c), t.h += A(c).high||0, t.m += A(c).med||0, t.st += (!c.asOf || c.asOf < yday) ? 1 : 0, t), {s:0,h:0,m:0,st:0});
+  $('tot').innerHTML = [['לקוחות', int(H.clients.length)], [`הוצאה · ${P==='d7'?'7':'30'} ימים`, ils(T.s)], ['התראות דחופות', int(T.h)], ['לבדיקה', int(T.m)],
+    ['לא עודכנו', int(T.st)]].map(([l,v]) => `<div class="card"><span>${l}</span><b class="num">${v}</b></div>`).join('');
+  $('grid').innerHTML = list.map(c => {
+    const m = c[P] || {}, k = c.kpi || {label:'לידים', cpa:'עלות לליד'}, cpa = m.l ? m.s / m.l : null;
+    const stale = !c.asOf || c.asOf < yday, a = c.alerts || {};
+    return `<div class="card cl ${a.high ? 'hi' : a.med ? 'me' : ''}">
+      <h3><span>${esc(c.name)}</span><span class="cnt">${a.high ? `<span class="h">${a.high} דחוף</span>` : ''}${a.med ? `<span class="m">${a.med}</span>` : ''}${!a.high && !a.med ? '<span class="ok">✓</span>' : ''}</span></h3>
+      <div class="sub">${c.status === 'paused' ? '<span class="pill paused">מושהה</span>' : ''}${stale ? `<span class="pill stale">${c.fresh === false ? 'העדכון האחרון נכשל' : 'לא עודכן'}</span>` : ''}
+        <span>נתונים עד ${fdate(c.asOf)}</span>${c.owner && c.owner !== 'TBD' ? `<span>· ${esc(c.owner)}</span>` : ''}<span>· ${(c.platforms||[]).map(p => ({meta:"Meta",google:"Google",linkedin:"LinkedIn",tiktok:"TikTok"})[p] || p).join(" · ")}</span></div>
+      <div class="stats"><div><span>הוצאה</span><b class="num">${ils(m.s)}</b></div>
+        <div><span>${esc(k.label)}</span><b class="num">${int(m.l)}</b>${k.value ? `<small>ROAS ${m.s ? (m.v/m.s).toFixed(2) : '—'}</small>` : ''}</div>
+        <div><span>${esc(k.cpa)}</span><b class="num">${cpa == null ? '—' : ils(cpa)}</b></div></div>
+      ${(c.top || []).length ? `<ul class="al">${c.top.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
+      <div class="act"><a class="pri" href="${esc(c.team)}">דשבורד צוות</a>
+        ${c.link ? `<a href="${esc(c.link)}" target="_blank" rel="noopener">דשבורד לקוח ↗</a><button data-copy="${esc(c.link)}">העתקת לינק ללקוח</button>` : ''}</div>
+    </div>`;
+  }).join('') || '<div class="card cl">לא נמצאו לקוחות</div>';
+  $('grid').querySelectorAll('[data-copy]').forEach(b => b.onclick = async () => {
+    try { await navigator.clipboard.writeText(b.dataset.copy); toast('הלינק הועתק – אפשר לשלוח ללקוח'); } catch(e){ prompt('העתיקו את הלינק:', b.dataset.copy); } });
+}
+boot();
+</script>
+</body>
+</html>

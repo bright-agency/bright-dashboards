@@ -1,0 +1,110 @@
+name: Build dashboards
+
+on:
+  schedule:
+    # Israel time ≈ UTC+3: ~05:17, 09:17, 13:17, 18:17. Odd minute = less load = fewer dropped scheduled runs.
+    - cron: "17 2,6,10,15 * * *"
+  workflow_dispatch:
+    inputs:
+      only:
+        description: "Build only these client slugs (comma separated). Empty = all."
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: build-dashboards
+  cancel-in-progress: false
+
+env:
+  SITE_URL: https://bright-agency.github.io/bright-dashboards
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      clients: ${{ steps.list.outputs.clients }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: list
+        env:
+          ONLY: ${{ github.event.inputs.only }}
+        run: |
+          python - <<'EOF' >> "$GITHUB_OUTPUT"
+          import json, os, pathlib
+          only = {s.strip() for s in os.environ.get("ONLY", "").split(",") if s.strip()}
+          slugs = []
+          for p in sorted(pathlib.Path("clients").glob("*/client.json")):
+              c = json.loads(p.read_text(encoding="utf-8"))
+              if c.get("status") != "inactive" and (not only or c["slug"] in only):
+                  slugs.append(c["slug"])
+          print("clients=" + json.dumps(slugs))
+          EOF
+
+  build:
+    needs: plan
+    runs-on: ubuntu-latest
+    continue-on-error: true          # one failing client never blocks the others
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        slug: ${{ fromJson(needs.plan.outputs.clients) }}
+    env:
+      CLIENT: ${{ matrix.slug }}
+      WINDSOR_API_KEY: ${{ secrets.WINDSOR_API_KEY }}
+      TEAM_PASSWORD: ${{ secrets.TEAM_PASSWORD }}
+      DASHBOARD_MASTER_KEY: ${{ secrets.DASHBOARD_MASTER_KEY }}
+      TEAM_WRITE_TOKEN: ${{ secrets.TEAM_WRITE_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q cryptography
+      - name: Client data
+        run: python engine/fetch_client.py
+      - name: Team data
+        run: python engine/fetch_team.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.slug }}
+          path: |
+            build/${{ matrix.slug }}/team.enc.json
+            build/${{ matrix.slug }}/client.enc.json
+            build/${{ matrix.slug }}/summary.json
+          if-no-files-found: ignore
+          retention-days: 2
+
+  deploy:
+    needs: [plan, build]
+    if: always()
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q cryptography
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: build-*
+          path: build
+      - name: Assemble site
+        env:
+          TEAM_PASSWORD: ${{ secrets.TEAM_PASSWORD }}
+          DASHBOARD_MASTER_KEY: ${{ secrets.DASHBOARD_MASTER_KEY }}
+          TEAM_WRITE_TOKEN: ${{ secrets.TEAM_WRITE_TOKEN }}
+        run: python engine/build_site.py build site
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4

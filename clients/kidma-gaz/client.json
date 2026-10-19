@@ -1,0 +1,38 @@
+{
+  "slug": "kidma-gaz",
+  "name": "קידמה גז",
+  "status": "active",
+  "owner": "TBD",
+  "accounts": {
+    "meta": [
+      {
+        "id": "1527266369154283",
+        "currency": "ILS"
+      }
+    ]
+  },
+  "kpi": {
+    "type": "leads",
+    "meta": [
+      "actions_onsite_conversion_messaging_conversation_started_7d",
+      "actions_offsite_conversion_fb_pixel_lead"
+    ],
+    "google": "conversions",
+    "linkedin": "externalwebsiteconversions",
+    "tiktok": "conversions",
+    "label": "פניות"
+  },
+  "grouping": {
+    "mode": "project"
+  },
+  "history_start": "2026-01-01",
+  "detail_days": 120,
+  "key_version": 1,
+  "alerts": {
+    "no_leads_min_spend": 300,
+    "cpl_rise_ratio": 1.3,
+    "meta_frequency_max": 3.5,
+    "pace_low": 0.8,
+    "pace_high": 1.15
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "slug": "iac-animation",
+  "name": "המכללה הישראלית לאנימציה (IAC)",
+  "status": "active",
+  "owner": "TBD",
+  "accounts": {
+    "meta": [
+      {
+        "id": "1096985502709749",
+        "currency": "ILS"
+      },
+      {
+        "id": "1718838309195214",
+        "currency": "ILS"
+      }
+    ],
+    "google": [
+      {
+        "id": "180-177-9065",
+        "currency": "ILS"
+      }
+    ],
+    "tiktok": [
+      {
+        "id": "7498277561957580801",
+        "currency": "ILS"
+      }
+    ]
+  },
+  "kpi": {
+    "type": "leads",
+    "meta": [
+      "actions_offsite_conversion_fb_pixel_lead",
+      "actions_onsite_conversion_lead_grouped"
+    ],
+    "google": "conversions",
+    "linkedin": "externalwebsiteconversions",
+    "tiktok": "conversions"
+  },
+  "grouping": {
+    "mode": "project"
+  },
+  "history_start": "2026-01-01",
+  "detail_days": 120,
+  "key_version": 1,
+  "alerts": {
+    "no_leads_min_spend": 300,
+    "cpl_rise_ratio": 1.3,
+    "meta_frequency_max": 3.5,
+    "pace_low": 0.8,
+    "pace_high": 1.15
+  }
+}

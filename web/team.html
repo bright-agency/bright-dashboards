@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>BRIGHT · דשבורד קמפיינרים</title>
+<link rel="icon" href="../../assets/bright-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F4F2; --surface:#FFFFFF; --surface-2:#FAFAF8; --ink:#141B34; --mute:#6E6E73; --mute-2:#7A7A72;
+  --hair:#E4E4E0; --hair-2:#ECECE8; --navy:#141B34; --yellow:#FBDD5C; --yellow-soft:#FDF8E6; --yellow-2:#FDF3C7;
+  --good:#1F9D57; --good-bg:#D8F0E2; --bad:#D64545; --bad-bg:#FBE6E6; --warn:#B7791F; --warn-bg:#FDF3C7;
+  --c-meta:#141B34; --c-google:#E9B824; --c-linkedin:#5B8DB8;
+  --shadow:0 1px 0 rgba(20,27,52,.03),0 10px 28px -14px rgba(20,27,52,.18); --r:16px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Assistant,"Arial Hebrew",Arial,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1360px;margin:0 auto;padding:0 28px}
+.num{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+button{font:inherit}
+
+/* gate */
+.gate{position:fixed;inset:0;background:var(--navy);display:grid;place-items:center;z-index:50;padding:20px}
+.gate form{background:#fff;border-radius:20px;padding:30px 28px;width:100%;max-width:380px;text-align:center;border-top:5px solid var(--yellow)}
+.gate img{width:56px;height:56px;border-radius:50%}
+.gate h2{margin:12px 0 2px;font-size:22px;font-weight:800}
+.gate p{margin:0 0 18px;color:var(--mute);font-size:14px}
+.gate input{width:100%;font:inherit;font-size:16px;padding:11px 14px;border:1px solid var(--hair);border-radius:12px;text-align:center}
+.gate button{margin-top:12px;width:100%;padding:11px;border:0;border-radius:12px;background:var(--navy);color:#fff;font-weight:700;font-size:16px;cursor:pointer}
+.gate .err{color:var(--bad);font-size:13.5px;min-height:20px;margin-top:8px}
+.gate.hide{display:none}
+
+/* masthead */
+.mast{background:var(--navy);color:#E9EAF0;padding:22px 0 30px;position:relative}
+.mast::after{content:"";position:absolute;inset:auto 0 0 0;height:4px;background:var(--yellow)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:14px}
+.brand img{width:44px;height:44px;border-radius:50%;box-shadow:0 0 0 2px var(--yellow)}
+.brand .eyebrow{color:var(--yellow);font-size:13px;font-weight:700}
+.brand h1{margin:0;font-size:26px;font-weight:800;color:#fff;line-height:1.15}
+.badge-int{background:var(--yellow);color:var(--navy);font-size:12px;font-weight:800;padding:2px 10px;border-radius:999px;margin-inline-start:8px;vertical-align:middle}
+.upd{color:#B9BCCB;font-size:13px;text-align:left}
+.upd b{color:#fff}
+.lock{background:transparent;border:1px solid rgba(255,255,255,.25);color:#DDE0EA;border-radius:999px;padding:4px 12px;font-size:12.5px;cursor:pointer;margin-top:6px}
+.periods{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{border:1px solid rgba(255,255,255,.2);background:transparent;color:#DDE0EA;padding:7px 16px;border-radius:999px;font-size:14px;font-weight:500;cursor:pointer}
+.chip:hover{border-color:rgba(255,255,255,.5);color:#fff}
+.chip.on{background:var(--yellow);color:var(--navy);border-color:var(--yellow);font-weight:700}
+.custom{display:flex;align-items:center;gap:6px;padding:3px 6px 3px 12px;border-radius:999px;border:1px dashed rgba(255,255,255,.3)}
+.custom.on{background:var(--yellow);border:1px solid var(--yellow)}
+.custom span{font-size:13px;color:#B9BCCB}.custom.on span{color:var(--navy);font-weight:600}
+.custom input{font:inherit;font-size:13px;border:0;border-radius:999px;padding:4px 8px;background:#fff;color:var(--ink)}
+.range{margin-top:12px;color:#B9BCCB;font-size:13px}
+.range b{color:#fff}
+
+main{padding:22px 0 56px}
+.card{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);border:1px solid var(--hair)}
+.section{margin-top:26px}
+.sec-h{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin:0 2px 12px;flex-wrap:wrap}
+.sec-h h2{margin:0;font-size:23px;font-weight:800;display:flex;align-items:center;gap:10px}
+.sec-h h2::before{content:"";width:6px;height:22px;border-radius:3px;background:var(--yellow)}
+.sec-h p{margin:2px 0 0;color:var(--mute-2);font-size:13.5px}
+.seg{display:inline-flex;background:#fff;border:1px solid var(--hair);border-radius:12px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--mute);font-weight:600;font-size:14px}
+.seg button.on{background:var(--navy);color:#fff}
+.seg button .c{font-size:12px;opacity:.75;margin-inline-start:4px}
+
+/* KPI strip */
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.kpi{padding:14px 16px}
+.kpi span{display:block;font-size:12.5px;color:var(--mute-2);font-weight:600}
+.kpi b{display:block;font-size:24px;font-weight:800;margin-top:2px}
+.kpi small{font-size:12px;color:var(--mute-2)}
+
+/* alerts */
+.alerts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.al{display:flex;gap:12px;padding:12px 14px;align-items:flex-start;border-inline-start:5px solid var(--hair)}
+.al.high{border-inline-start-color:var(--bad)}.al.med{border-inline-start-color:#E9B824}.al.info{border-inline-start-color:#5B8DB8}
+.al .sev{font-size:11.5px;font-weight:800;padding:1px 8px;border-radius:999px;white-space:nowrap}
+.al.high .sev{background:var(--bad-bg);color:var(--bad)}.al.med .sev{background:var(--warn-bg);color:#8A6400}.al.info .sev{background:#E5EEF6;color:#2E5B85}
+.al h4{margin:0;font-size:14.5px;font-weight:700}
+.al p{margin:2px 0 0;font-size:14px;color:var(--ink)}
+.al .who{font-size:12.5px;color:var(--mute-2);margin-top:3px}
+.al .pi{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;flex:none;background:var(--hair-2)}
+.al .pi svg{width:15px;height:15px}
+.empty{padding:22px;text-align:center;color:var(--mute-2)}
+
+/* courses */
+.course{margin-bottom:10px;overflow:hidden}
+.ch{display:grid;grid-template-columns:minmax(230px,2.1fr) 1.7fr 1fr 1fr 1fr 28px;gap:16px;align-items:center;padding:14px 18px;cursor:pointer}
+.ch:hover{background:#FCFBF5}
+.cn b{font-size:16px;font-weight:800;display:block;line-height:1.3}
+.cn .sub{font-size:12.5px;color:var(--mute-2);margin-top:3px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.st{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;padding:1px 9px 1px 8px;border-radius:999px}
+.st::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.st.live{background:var(--good-bg);color:#17784A}.st.paused{background:var(--yellow-2);color:#8A6400}.st.ended{background:var(--hair-2);color:var(--mute)}
+.pdots{display:inline-flex;gap:3px}
+.pdots i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.mt > span{display:block;font-size:11.5px;color:var(--mute-2);font-weight:600}
+.mt b{font-size:17px;font-weight:800}
+.mt small{display:block;font-size:12px;color:var(--mute-2)}
+.pace{position:relative;height:9px;border-radius:9px;background:var(--hair-2);margin:6px 0 4px;overflow:visible}
+.pace i{position:absolute;inset:0 0 0 auto;height:100%;border-radius:9px}
+.pace u{position:absolute;top:-4px;width:2px;height:17px;background:var(--navy);border-radius:2px}
+.pace-lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--mute-2)}
+.good{color:var(--good)}.bad{color:var(--bad)}.warn{color:#8A6400}
+.chev{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:var(--hair-2);transition:transform .2s}
+.course.open .chev{transform:rotate(180deg)}
+.cb{display:none;border-top:1px solid var(--hair);background:var(--surface-2);padding:16px 18px}
+.course.open .cb{display:block}
+.cb h5{margin:4px 0 10px;font-size:15px;font-weight:800}
+.mini-kpis{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.mini-kpis div{background:#fff;border:1px solid var(--hair);border-radius:12px;padding:8px 12px;min-width:120px}
+.mini-kpis > div > span:not(.picon){display:block;font-size:11.5px;color:var(--mute-2);font-weight:600}
+.mini-kpis b{font-size:16px;font-weight:800}
+
+/* tables */
+.tbl-wrap{overflow-x:auto;background:#fff;border:1px solid var(--hair);border-radius:12px;margin-bottom:16px}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:14px;min-width:900px}
+th{font-weight:700;color:var(--navy);font-size:12.5px;padding:10px 12px;background:#EEF0F4;border-bottom:2px solid #D9DCE6;white-space:nowrap;text-align:center}
+th:first-child{text-align:start}
+td{padding:10px 12px;border-bottom:1px solid var(--hair-2);white-space:nowrap;text-align:center}
+td:first-child{text-align:start;white-space:normal;min-width:240px}
+th+th,td+td{border-inline-start:1px solid #EEEEEA}
+tbody tr:nth-child(even) td{background:#FAFAF7}
+tbody tr:hover td{background:#F3F6FB}
+th.hl{background:#FBF1C4}
+td.hl{background-image:linear-gradient(rgba(251,221,92,.16),rgba(251,221,92,.16))}
+tbody tr:last-child td{border-bottom:0}
+.nm b{font-weight:700;display:block;line-height:1.35}
+.nm small{color:var(--mute-2);font-size:12px}
+.tag{font-size:11px;padding:1px 7px;border-radius:6px;background:var(--hair-2);color:var(--mute);margin-inline-end:4px}
+.ad{display:flex;gap:10px;align-items:center}
+.ad img{width:44px;height:44px;border-radius:8px;object-fit:cover;background:var(--hair-2);flex:none}
+.ad .ph{width:44px;height:44px;border-radius:8px;background:var(--hair-2);flex:none;display:grid;place-items:center;color:var(--mute-2);font-size:11px}
+.lk{display:inline-flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+.lk a{font-size:12px;font-weight:700;text-decoration:none;color:var(--navy);background:#fff;border:1px solid #D9DCE6;border-radius:8px;padding:2px 9px;white-space:nowrap}
+.lk a:hover{background:var(--yellow);border-color:var(--yellow)}
+.lk a.pv{background:var(--yellow-soft);border-color:var(--yellow-2)}
+a.cl{color:inherit;text-decoration:none}a.cl:hover{text-decoration:underline}a.cl::after{content:' ↗';font-size:11px;color:var(--mute-2)}
+.ad a img{display:block}
+.bedit{border:1px solid #D9DCE6;background:#fff;border-radius:8px;padding:0 8px;font-size:12px;font-weight:700;cursor:pointer;color:var(--navy);margin-inline-start:6px;vertical-align:middle}
+.bedit:hover{background:var(--yellow);border-color:var(--yellow)}
+.bsrc{font-size:10.5px;font-weight:700;padding:0 6px;border-radius:5px;margin-inline-start:4px;vertical-align:middle}
+.bsrc.manual{background:var(--good-bg);color:#17784A}.bsrc.name{background:var(--hair-2);color:var(--mute)}
+.bform{display:flex;gap:6px;align-items:center;margin-top:4px;flex-wrap:wrap}
+.bform input{width:120px;font:inherit;font-size:15px;font-weight:700;padding:5px 8px;border:2px solid var(--yellow);border-radius:9px;direction:ltr;text-align:center}
+.bform button{border:0;border-radius:9px;padding:6px 12px;font-weight:700;cursor:pointer}
+.bform .ok{background:var(--navy);color:#fff}.bform .no{background:var(--hair-2);color:var(--mute)}.bform .rm{background:transparent;color:var(--bad);text-decoration:underline;padding:6px 4px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 18px;border-radius:12px;font-weight:600;z-index:60;box-shadow:0 10px 30px rgba(0,0,0,.25);border-top:3px solid var(--yellow);opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}.toast.err{border-top-color:var(--bad)}
+.more{display:block;margin:-8px auto 16px;border:1px solid var(--hair);background:#fff;border-radius:999px;padding:5px 16px;cursor:pointer;font-weight:600;color:var(--mute)}
+.picon{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;vertical-align:middle;margin-inline-end:6px}
+.picon svg{width:13px;height:13px}
+.picon.meta{background:#E9EAF0}.picon.google{background:var(--yellow-2)}.picon.linkedin{background:#E5EEF6}
+
+/* breakdowns */
+.bd-ctrl{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.bd-ctrl select{font:inherit;font-size:14px;padding:7px 12px;border-radius:12px;border:1px solid var(--hair);background:#fff;max-width:100%}
+.bd-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.bd{padding:14px 16px}
+.bd h4{margin:0 0 10px;font-size:15.5px;font-weight:800}
+.bd .row{display:grid;grid-template-columns:minmax(90px,1.1fr) 2fr repeat(3,minmax(58px,.6fr));gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--hair-2);font-size:13.5px}
+.bd .row:last-child{border-bottom:0}
+.bd .row.hd{font-size:11.5px;color:var(--mute-2);font-weight:700;padding-top:0}
+.bd .bar{height:8px;border-radius:8px;background:var(--hair-2);overflow:hidden}
+.bd .bar i{display:block;height:100%;border-radius:8px}
+.bd .row > :nth-child(n+3){text-align:center}
+.note{font-size:12.5px;color:var(--mute-2);margin:8px 2px 0}
+.foot{margin-top:30px;padding-top:16px;border-top:1px solid var(--hair);color:var(--mute-2);font-size:12.5px;line-height:1.75}
+.foot b{color:var(--ink)}
+
+@media (max-width:1100px){.ch{grid-template-columns:1fr 1fr 1fr;row-gap:12px}.ch .cn{grid-column:1/-1}.ch .chev{display:none}.kpis{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:900px){.alerts,.bd-grid{grid-template-columns:1fr}}
+@media (max-width:560px){
+  .wrap{padding:0 14px}
+  .brand h1{font-size:21px}.upd{text-align:right}
+  .periods{flex-wrap:nowrap;overflow-x:auto;margin:16px -14px 0;padding:0 14px 4px;scrollbar-width:none}
+  .periods::-webkit-scrollbar{display:none}
+  .chip,.custom{flex:none}.custom span:first-child{display:none}.custom input{width:126px}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .ch{grid-template-columns:1fr 1fr;padding:12px 14px}
+  .cb{padding:12px}
+  .bd .row{grid-template-columns:minmax(80px,1fr) 1.2fr repeat(2,52px)}.bd .row > :nth-child(5){display:none}
+}
+.novl .vl{display:none}.noval .val{display:none}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div class="gate" id="gate">
+  <form id="gateForm" autocomplete="off">
+    <img src="../../assets/bright-logo.png" alt="BRIGHT">
+    <h2>דשבורד קמפיינרים</h2>
+    <p>גישה לצוות BRIGHT בלבד</p>
+    <input type="password" id="pw" placeholder="סיסמה" aria-label="סיסמה" autocomplete="current-password">
+    <button type="submit" id="go">כניסה</button>
+    <div class="err" id="err"></div>
+  </form>
+</div>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <img src="../../assets/bright-logo.png" alt="BRIGHT">
+        <div><div class="eyebrow"><a href="../../team/" style="color:inherit;text-decoration:none">BRIGHT · כל הלקוחות ←</a> <span id="cName"></span></div>
+          <h1>דשבורד קמפיינרים <span class="badge-int">פנימי</span></h1></div>
+      </div>
+      <div class="upd">נתונים עד <b id="asOf" class="num">—</b> · עודכן <span id="updated" class="num">—</span><br>
+        <button class="lock" id="lock">נעילה</button></div>
+    </div>
+    <div class="periods" id="periods">
+      <button class="chip" data-p="last7">7 ימים</button>
+      <button class="chip" data-p="last15">15 ימים</button>
+      <button class="chip on" data-p="last30">30 ימים</button>
+      <button class="chip" data-p="thisMonth">החודש</button>
+      <button class="chip" data-p="lastMonth">חודש שעבר</button>
+      <button class="chip" data-p="lastQuarter">רבעון אחרון</button>
+      <div class="custom" id="custom"><span>טווח ידני</span>
+        <input type="date" id="from" aria-label="מתאריך"><span>–</span><input type="date" id="to" aria-label="עד תאריך"></div>
+    </div>
+    <div class="range" id="rangeTxt"></div>
+  </div>
+</header>
+
+<main class="wrap" id="app" hidden>
+  <section class="kpis" id="kpis"></section>
+
+  <section class="section">
+    <div class="sec-h"><div><h2>התראות וחריגות</h2><p>מצב נוכחי, מחושב בכל עדכון נתונים</p></div>
+      <div class="seg" id="alertSeg"></div></div>
+    <div class="alerts" id="alerts"></div>
+  </section>
+
+  <section class="section">
+    <div class="sec-h"><div><h2 id="grpTitle">פרויקטים</h2><p id="grpSub"></p></div>
+      <div class="seg" id="courseSeg"></div></div>
+    <div id="courses"></div>
+  </section>
+
+  <section class="section">
+    <div class="sec-h"><div><h2>פילוחים</h2><p>לפי התקופה הנבחרת</p></div></div>
+    <div class="bd-ctrl">
+      <div class="seg" id="bdPlat"></div>
+      <select id="bdCourse" aria-label="סינון לפי קורס"></select>
+    </div>
+    <div class="bd-grid" id="bd"></div>
+    <div class="note" id="bdNote"></div>
+  </section>
+
+  <div class="foot">
+    <span id="defs"></span>
+    סטים, מודעות ופילוחים זמינים מ-<span class="num" id="detailFrom"></span>. <span id="tokInfo"></span>
+  </div>
+</main>
+
+<script>
+const PL = ['meta','google','linkedin','tiktok'];
+const PLAT = {
+  tiktok:{name:'TikTok',color:'#25F4EE',icon:'<svg viewBox="0 0 24 24"><path fill="#141B34" d="M19.6 6.7a4.8 4.8 0 0 1-3.8-4.2V2h-3.4v13.4a2.9 2.9 0 1 1-2-2.7V9.2a6.3 6.3 0 1 0 5.4 6.2V8.6a8.2 8.2 0 0 0 3.8 1V6.7z"/></svg>'},
+  meta:{name:'Meta',color:'#141B34',icon:'<svg viewBox="0 0 24 24"><path fill="#141B34" d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>'},
+  google:{name:'Google',color:'#E9B824',icon:'<svg viewBox="0 0 48 48"><path fill="#141B34" d="M43.6 20.1H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.9z"/></svg>'},
+  linkedin:{name:'LinkedIn',color:'#5B8DB8',icon:'<svg viewBox="0 0 24 24"><path fill="#3F6E99" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>'}
+};
+const K = () => (D && D.meta.kpi) || {type:'leads', label:'לידים', unit:'ליד', cpa:'עלות לליד', rate:'אחוז המרה', value:false};
+const VL = () => !!(D && D.meta.validLeads);
+const VLAB = () => VL() ? 'לידים תקינים' : K().label;
+const VCPA = () => VL() ? 'עלות לליד תקין' : K().cpa;
+const roas = t => t.s ? t.r / t.s : null;
+const TYPE_HE = {'Push':'Push','PMAX':'Performance Max','Search Brand':'חיפוש מותג','Brand':'מותג / מעורבות','LeadGen':'טופס לידים','Remarketing':'רימרקטינג','Website Leads':'לידים מהאתר','Engagement':'מעורבות','Awareness':'מודעות',
+  'Brand Awareness':'מודעות למותג','Search':'חיפוש','PMax':'Performance Max','GDN':'רשת המדיה','YouTube':'YouTube'};
+const ST = {live:'באוויר', paused:'מושהה', ended:'הסתיים'};
+const SEV = {high:'דחוף', med:'לבדיקה', info:'לידיעה'};
+const DIM_HE = {
+  facebook:'Facebook', instagram:'Instagram', audience_network:'Audience Network', messenger:'Messenger', threads:'Threads',
+  feed:'פיד', facebook_reels:'Reels', instagram_reels:'Reels', story:'סטורי', facebook_stories:'סטוריז', instagram_stories:'סטוריז',
+  instagram_explore:'Explore', instagram_explore_grid_home:'Explore Home', marketplace:'Marketplace', video_feeds:'פיד וידאו',
+  right_hand_column:'עמודה ימנית', search:'חיפוש', an_classic:'קלאסי', rewarded_video:'וידאו מתגמל', instream_video:'In-stream',
+  facebook_profile_feed:'פיד פרופיל', instagram_profile_feed:'פיד פרופיל', notification:'התראות', facebook_reels_overlay:'Reels Overlay',
+  mobile_app:'מובייל', desktop:'דסקטופ', mobile_web:'מובייל ווב', unknown:'לא ידוע', MOBILE:'מובייל', DESKTOP:'דסקטופ', TABLET:'טאבלט',
+  CONNECTED_TV:'טלוויזיה', OTHER:'אחר', female:'נשים', male:'גברים'
+};
+const he = s => DIM_HE[s] || s;
+
+const $ = id => document.getElementById(id);
+const from = $('from'), to = $('to');
+let PW = null, BUD = {}, BUD_SHA = null, LIFE = null;
+let D, DAY, state = {key:'last30', from:null, to:null, alert:'all', courseFilter:'active', bdPlat:'meta', bdCourse:'live', open:new Set(), more:new Set()};
+
+const nf = new Intl.NumberFormat('he-IL');
+const fmt = {
+  int: v => nf.format(Math.round(v)),
+  ils: v => '₪' + nf.format(Math.round(v)),
+  ils2: v => '₪' + new Intl.NumberFormat('he-IL',{maximumFractionDigits:v<100?1:0}).format(v),
+  pct: v => (v*100).toFixed(v<0.1?2:1) + '%',
+  date: s => { const [y,m,d] = s.split('-'); return `${+d}.${+m}.${y.slice(2)}`; }
+};
+const or = (v,f,dash='—') => v==null||!isFinite(v) ? dash : f(v);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const iso = d => d.toISOString().slice(0,10);
+const addDays = (s,n) => { const d = new Date(s+'T00:00:00Z'); d.setUTCDate(d.getUTCDate()+n); return iso(d); };
+const days = (a,b) => Math.round((new Date(b+'T00:00:00Z') - new Date(a+'T00:00:00Z'))/864e5) + 1;
+const derive = t => (t.ctr = t.i ? t.k/t.i : null, t.cpl = t.l ? t.s/t.l : null, t.cr = t.k ? t.l/t.k : null, t);
+const zero = () => ({i:0,k:0,l:0,s:0,v:0,r:0});
+const MODE = () => (D && D.meta.mode) || 'course';
+const bkey = c => MODE()==='project' ? c.key + '|' + D.meta.month : c.key;
+const vderive = t => (t.vcpl = t.v ? t.s/t.v : null, t.vr = t.l ? t.v/t.l : null, t);
+const add = (t,i,k,l,s) => { t.i+=i; t.k+=k; t.l+=l; t.s+=s; };
+
+function cleanName(raw){
+  const parts = (raw.includes('|') ? raw.split('|') : raw.split(' - ')).map(s=>s.trim()).filter(Boolean)
+    .filter(s => !/^bright$/i.test(s) && !/^[\d.,]+$/.test(s));
+  const heb = parts.filter(s => /[֐-׿]/.test(s));
+  let n = heb.length ? heb.join(' · ') : parts.slice(1).join(' · ') || raw;
+  return n.replace(/\(?\b\d{1,2}\.\d{1,2}\.\d{2,4}\b\)?/g,'').replace(/\s{2,}/g,' ').trim();
+}
+const LINK_HE = {preview:'תצוגת מודעה', post:'פוסט', manage:{meta:'Ads Manager', google:'Google Ads', linkedin:'Campaign Manager'}};
+const ext = (u, t, cls='') => u ? `<a href="${esc(u)}" target="_blank" rel="noopener noreferrer" class="${cls}">${t} ↗</a>` : '';
+const pIcon = p => `<span class="picon ${p}" title="${PLAT[p].name}">${PLAT[p].icon}</span>`;
+
+/* ---------- data loading ---------- */
+async function decrypt(enc, pw){
+  const b = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  const km = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({name:'PBKDF2', salt:b(enc.salt), iterations:enc.iter, hash:'SHA-256'},
+    km, {name:'AES-GCM', length:256}, false, ['decrypt']);
+  const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv:b(enc.iv)}, key, b(enc.ct));
+  const stream = new Blob([pt]).stream().pipeThrough(new DecompressionStream('gzip'));
+  return await new Response(stream).json();
+}
+async function boot(){
+  const local = ['localhost','127.0.0.1'].includes(location.hostname);
+  if (local && !location.search.includes('enc')){
+    try { const r = await fetch('internal.dev.json?v='+Date.now()); if (r.ok) return start(await r.json()); } catch(e){}
+  }
+  let enc;
+  try { enc = await (await fetch('data.enc.json?v='+Date.now())).json(); }
+  catch(e){ $('err').textContent = 'הנתונים עדיין לא זמינים. נסו שוב מאוחר יותר.'; return; }
+  const tryPw = async pw => {
+    try { const d = await decrypt(enc, pw); PW = pw; try { sessionStorage.setItem('bright-team', pw); } catch(e){} await start(d); return true; }
+    catch(e){ return false; }
+  };
+  let saved = null; try { saved = sessionStorage.getItem('bright-team'); } catch(e){}
+  if (saved && await tryPw(saved)) return;
+  $('pw').focus();
+  $('gateForm').onsubmit = async e => {
+    e.preventDefault(); $('err').textContent = ''; $('go').disabled = true; $('go').textContent = 'פותח…';
+    const ok = await tryPw($('pw').value);
+    $('go').disabled = false; $('go').textContent = 'כניסה';
+    if (!ok){ $('err').textContent = 'סיסמה שגויה'; $('pw').select(); }
+  };
+}
+$('lock').onclick = () => { try { sessionStorage.removeItem('bright-team'); } catch(e){} location.reload(); };
+
+async function start(d){
+  D = d; DAY = d.days;
+  document.title = `BRIGHT · ${d.meta.client} · צוות`;
+  $('cName').textContent = '· ' + d.meta.client;
+  document.body.classList.toggle('novl', !VL()); document.body.classList.toggle('noval', !K().value);
+  const MO = d.meta.mode === 'course' ? 'course' : d.meta.single ? 'single' : 'project';
+  $('grpTitle').textContent = {course:'קורסים', project:'פרויקטים', single:'החשבון'}[MO];
+  $('grpSub').textContent = {course:'כל הפלטפורמות מרוכזות לפי קורס · לחיצה פותחת קמפיינים, סטים ומודעות',
+    project:'כל הפלטפורמות מרוכזות לפי פרויקט · לחיצה פותחת קהלים, קמפיינים, סטים ומודעות',
+    single:'תקציב חודשי, קצב וכל הקמפיינים · לחיצה פותחת קמפיינים, סטים ומודעות'}[MO];
+  $('defs').innerHTML = `<b>הגדרות:</b> ${K().label} = ${({leads:'התוצאה שהוגדרה ללקוח בכל פלטפורמה', purchase:'רכישות; הכנסות ו-ROAS לפי ערך הרכישה בפלטפורמות', traffic:'הקלקות (ללקוח אין מעקב המרות)'})[K().type]}.
+    ${VL() ? '<b>לידים תקינים</b> = מ-CRM (LEAD.IM) לפי utm_campaign; לידים בלי שם קמפיין מופיעים כ"לא משויך לקמפיין". ' : ''}
+    ${MO === 'course' ? '<b>תקציב</b> = מהשם או ידני לקורס; קצב = הוצאה מול החלק היחסי עד מועד הקורס.' : '<b>תקציב</b> = תקציב חודשי ידני (כל הפלטפורמות); קצב = הוצאה מתחילת החודש מול החלק היחסי של החודש.'}
+    הוצאה בדולר מומרת לשקלים לפי שער יומי. `;
+  $('gate').classList.add('hide'); $('app').hidden = false;
+  $('asOf').textContent = fmt.date(d.meta.asOf);
+  const ilToday = new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Jerusalem'}).format(new Date());
+  const lag = days(d.meta.asOf, ilToday) - 2;      // 0 = up to yesterday, as expected
+  if (lag > 0) $('asOf').insertAdjacentHTML('afterend', ` <span style="color:#FBDD5C;font-weight:700">⚠ הנתונים בפיגור של ${lag} ${lag===1?'יום':'ימים'} – העדכון האוטומטי לא רץ</span>`);
+  $('updated').textContent = new Date(d.meta.generated).toLocaleString('he-IL',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jerusalem'});
+  $('detailFrom').textContent = fmt.date(d.meta.detailFrom);
+  if (d.meta.leadsMissing)
+    $('asOf').insertAdjacentHTML('afterend', ' <span style="color:#FBDD5C;font-weight:700">⚠ לידים תקינים מ-CRM עדיין לא מחוברים – מוצגים לידים מהפלטפורמות</span>');
+  if (VL() && d.meta.leadsSource !== 'windsor')
+    $('asOf').insertAdjacentHTML('afterend', ` <span style="color:#FBDD5C;font-weight:700">⚠ ${d.meta.leadsSource === 'local' ? 'לידים תקינים מתצוגה מקומית' : 'לידים תקינים מ-LEAD.IM עדיין לא מחוברים'}</span>`);
+  $('tokInfo').textContent = d.meta.write ? '' : 'שמירת תקציבים משותפת: לא הוגדרה.';
+  for (const el of [from,to]){ el.min = DAY.reduce((a,b)=>a<b?a:b); el.max = d.meta.asOf; }
+  document.querySelectorAll('.chip').forEach(c => c.onclick = () => setKey(c.dataset.p));
+  const onCustom = () => { if (!from.value || !to.value) return; if (from.value > to.value) [from.value,to.value] = [to.value,from.value];
+    state.from = from.value; state.to = to.value; setKey('custom'); };
+  from.onchange = onCustom; to.onchange = onCustom;
+  precompute();
+  await loadBudgets();
+  setKey('last30');
+}
+function setKey(k){
+  state.key = k;
+  document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.dataset.p===k));
+  $('custom').classList.toggle('on', k==='custom');
+  if (k !== 'custom'){ const [a,b] = D.meta.presets[k]; from.value = a; to.value = b; }
+  render();
+}
+const range = () => state.key==='custom' ? [state.from, state.to] : D.meta.presets[state.key];
+
+/* ---------- render ---------- */
+function render(){
+  const [a,b] = range();
+  const n = days(a,b), pa = addDays(a,-n), pb = addDays(a,-1);
+  $('rangeTxt').innerHTML = `תקופה: <b class="num">${fmt.date(a)} – ${fmt.date(b)}</b> (${n} ימים)`;
+  const inP = d => { const s = DAY[d]; return s >= a && s <= b; };
+  const inPrev = d => { const s = DAY[d]; return s >= pa && s <= pb; };
+
+  // per-campaign period totals
+  const cp = D.campaigns.map(zero), cprev = D.campaigns.map(zero);
+  for (const [d,ci,i,k,l,s] of D.rows){ if (inP(d)) add(cp[ci],i,k,l,s); else if (inPrev(d)) add(cprev[ci],i,k,l,s); }
+  for (const [d,ci,v] of (D.leadRows || [])){ if (inP(d)) cp[ci].v += v; else if (inPrev(d)) cprev[ci].v += v; }
+  for (const [d,ci,v] of (D.valRows || [])){ if (inP(d)) cp[ci].r += v; else if (inPrev(d)) cprev[ci].r += v; }
+  cp.forEach(derive); cp.forEach(vderive);
+
+  // KPIs
+  const T = zero(), P = zero();
+  cp.forEach(t => { add(T,t.i,t.k,t.l,t.s); T.v += t.v; T.r += t.r; }); cprev.forEach(t => { add(P,t.i,t.k,t.l,t.s); P.v += t.v; P.r += t.r; });
+  derive(T); derive(P); vderive(T); vderive(P);
+  const liveCamps = D.campaigns.filter(c => c.status==='live').length;
+  const activeCourses = D.courses.filter(c => !c.brand && c.phase !== 'ended').length;
+  const dl = (c,p,inv) => { if (c==null||!p) return ''; const ch=(c-p)/p; const good = inv ? ch<0 : ch>0;
+    return `<small class="${Math.abs(ch)<.005?'':good?'good':'bad'}">${ch>0?'▲':'▼'} ${Math.abs(ch*100).toFixed(0)}% מול תקופה קודמת</small>`; };
+  const KP = MODE()==='project' ? [
+    ['השקעה', fmt.ils(T.s), dl(T.s,P.s,null)], [VLAB(), fmt.int(T.v), dl(T.v,P.v)], [VCPA(), or(T.vcpl,fmt.ils2), dl(T.vcpl,P.vcpl,true)],
+    VL() ? ['לידים בפלטפורמה', fmt.int(T.l), `<small>${or(T.vr,fmt.pct)} מהם הגיעו כתקינים</small>`]
+      : K().value ? ['הכנסות', fmt.ils(T.r), `<small>ROAS ${or(roas(T), v => v.toFixed(2))}</small>`]
+      : ['CTR', or(T.ctr,fmt.pct), dl(T.ctr,P.ctr)],
+    D.meta.single ? ['קמפיינים באוויר', fmt.int(liveCamps), `<small>${D.campaigns.filter(c=>!c.pseudo).length} קמפיינים בסה"כ</small>`]
+      : ['פרויקטים פעילים', fmt.int(D.courses.filter(c => !c.brand && c.live).length), `<small>${liveCamps} קמפיינים באוויר</small>`],
+    ['התראות', fmt.int(allAlerts().length), `<small>${allAlerts().filter(x=>x.sev==='high').length} דחופות</small>`]
+  ] : null;
+  $('kpis').innerHTML = (KP || [
+    ['השקעה', fmt.ils(T.s), dl(T.s,P.s,null)], [K().label, fmt.int(T.l), dl(T.l,P.l)], [K().cpa, or(T.cpl,fmt.ils2), dl(T.cpl,P.cpl,true)],
+    ['אחוז המרה', or(T.cr,fmt.pct), dl(T.cr,P.cr)], ['קורסים פעילים', fmt.int(activeCourses), `<small>${liveCamps} קמפיינים באוויר</small>`],
+    ['התראות', fmt.int(allAlerts().length), `<small>${allAlerts().filter(x=>x.sev==='high').length} דחופות</small>`]
+  ]).map(([l,v,s]) => `<div class="card kpi"><span>${l}</span><b class="num">${v}</b>${s||''}</div>`).join('');
+
+  renderAlerts();
+  renderCourses(cp, inP);
+  renderBreakdowns(inP);
+}
+
+function renderAlerts(){
+  const AL = allAlerts();
+  const counts = {all:AL.length}; AL.forEach(a => counts[a.sev] = (counts[a.sev]||0)+1);
+  $('alertSeg').innerHTML = [['all','הכל'],['high','דחוף'],['med','לבדיקה'],['info','לידיעה']]
+    .map(([k,l]) => `<button class="${state.alert===k?'on':''}" data-k="${k}">${l}<span class="c">${counts[k]||0}</span></button>`).join('');
+  $('alertSeg').querySelectorAll('button').forEach(b => b.onclick = () => { state.alert = b.dataset.k; renderAlerts(); });
+  const list = AL.filter(a => state.alert==='all' || a.sev===state.alert);
+  $('alerts').innerHTML = list.length ? list.map(a => {
+    const c = a.campaign!=null ? D.campaigns[a.campaign] : null, co = a.course!=null ? D.courses[a.course] : null;
+    return `<div class="card al ${a.sev}">
+      ${c ? `<span class="pi">${PLAT[c.p].icon}</span>` : `<span class="pi">${a.type && a.type.startsWith('token') ? '🔑' : (MODE()==='project' ? (D.meta.single ? '📊' : '🏢') : '🎓')}</span>`}
+      <div style="flex:1;min-width:0"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <span class="sev">${SEV[a.sev]}</span><h4>${esc(co ? co.name : a.type && a.type.startsWith('token') ? 'הגדרות מערכת' : '')}</h4></div>
+        <p>${esc(a.msg)}</p>${c ? `<div class="who">${PLAT[c.p].name} · ${esc(cleanName(c.name))}${c.type?' · '+(TYPE_HE[c.type]||c.type):''}</div>` : ''}</div></div>`;
+  }).join('') : `<div class="card empty" style="grid-column:1/-1">אין התראות בקטגוריה הזו 🎉</div>`;
+}
+
+/* ---------- course budgets (manual, saved encrypted to GitHub) ---------- */
+function precompute(){
+  const asOf = D.meta.asOf, d7 = addDays(asOf, -6);
+  const m0 = (D.meta.month || asOf.slice(0,7)) + '-01';
+  LIFE = D.campaigns.map(() => ({s:0, s7:0, m:0, mv:0}));
+  for (const [d,ci,,,,s] of D.rows){ LIFE[ci].s += s; if (DAY[d] >= d7 && DAY[d] <= asOf) LIFE[ci].s7 += s; if (DAY[d] >= m0 && DAY[d] <= asOf) LIFE[ci].m += s; }
+  for (const [d,ci,v] of (D.leadRows || [])) if (DAY[d] >= m0 && DAY[d] <= asOf) LIFE[ci].mv += v;
+}
+function budgetInfoMonth(c){
+  const man = BUD[bkey(c)] && BUD[bkey(c)].budget;
+  const spent = c.campaigns.reduce((t,ci) => t + LIFE[ci].m, 0), avg7 = c.campaigns.reduce((t,ci) => t + LIFE[ci].s7, 0) / 7;
+  const mv = c.campaigns.reduce((t,ci) => t + LIFE[ci].mv, 0);
+  const o = {budget: man || null, budgetName: null, budgetSource: man ? 'manual' : null, budgetSpent: spent, budgetAvg7: avg7, monthValid: mv,
+             expected:null, pace:null, elapsedPct:null, remaining:null, requiredDaily:null, projected:null};
+  const asOf = D.meta.asOf, y = +asOf.slice(0,4), m = +asOf.slice(5,7), dim = new Date(Date.UTC(y, m, 0)).getUTCDate(), el = +asOf.slice(8,10);
+  if (!man) return o;
+  o.expected = man * el / dim; o.elapsedPct = el / dim; o.pace = spent / o.expected; o.remaining = man - spent;
+  const left = dim - el;
+  if (left > 0){ o.requiredDaily = Math.max(0, man - spent) / left; o.projected = spent + avg7 * left; o.daysLeft = left; }
+  return o;
+}
+function budgetInfo(c){
+  if (c.brand) return {};
+  if (MODE()==='project') return budgetInfoMonth(c);
+  const man = BUD[c.key] && BUD[c.key].budget;
+  const budgetName = c.campaigns.reduce((t,ci) => t + (D.campaigns[ci].budget || 0), 0) || null;
+  const cis = man ? c.campaigns : c.campaigns.filter(ci => D.campaigns[ci].budget);
+  const budget = man || budgetName, src = man ? 'manual' : budgetName ? 'name' : null;
+  const spent = cis.reduce((t,ci) => t + LIFE[ci].s, 0), avg7 = cis.reduce((t,ci) => t + LIFE[ci].s7, 0) / 7;
+  const o = {budget, budgetName, budgetSource:src, budgetSpent:spent, budgetAvg7:avg7,
+             expected:null, pace:null, elapsedPct:null, remaining:null, requiredDaily:null, projected:null};
+  if (!budget || !c.start || !c.launch || c.start <= c.launch) return o;
+  const asOf = D.meta.asOf, total = days(c.launch, c.start);
+  const elapsed = Math.max(0, Math.min(days(c.launch, asOf < c.start ? asOf : c.start), total));
+  o.expected = budget * elapsed / total; o.elapsedPct = elapsed / total;
+  o.pace = o.expected ? spent / o.expected : null; o.remaining = budget - spent;
+  if (c.daysLeft > 0){ o.requiredDaily = Math.max(0, budget - spent) / c.daysLeft; o.projected = spent + avg7 * c.daysLeft; }
+  return o;
+}
+function allAlerts(){
+  const PACE = new Set(['under_pace','over_pace','projected_over']);
+  const out = D.alerts.filter(a => !PACE.has(a.type));
+  D.courses.forEach((c,i) => {
+    if (c.brand || c.phase === 'ended') return;
+    const b = budgetInfo(c);
+    if (b.pace != null && b.elapsedPct >= .2){
+      if (b.pace < .8) out.push({sev:'med', type:'under_pace', course:i, value:b.pace,
+        msg:`מתחת לקצב התקציב: הוצא ₪${fmt.int(b.budgetSpent)} מתוך ₪${fmt.int(b.expected)} צפוי (${(b.pace*100).toFixed(0)}%)`});
+      else if (b.pace > 1.15) out.push({sev: (b.projected||0) > b.budget*1.1 ? 'high' : 'med', type:'over_pace', course:i, value:b.pace,
+        msg:`מעל קצב התקציב: הוצא ₪${fmt.int(b.budgetSpent)} מתוך ₪${fmt.int(b.expected)} צפוי (${(b.pace*100).toFixed(0)}%)`});
+    }
+    if (b.projected && b.budget && b.projected > b.budget * 1.1) out.push({sev:'med', type:'projected_over', course:i,
+      msg:`בקצב הנוכחי צפוי לסיים ב-₪${fmt.int(b.projected)} מול תקציב ₪${fmt.int(b.budget)}`});
+  });
+  const r = {high:0, med:1, info:2};
+  return out.sort((x,y) => r[x.sev] - r[y.sev]);
+}
+
+const b64e = u8 => { let s = ''; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); };
+async function encryptJSON(obj, pw){
+  const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12)), iter = 310000;
+  const km = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({name:'PBKDF2', salt, iterations:iter, hash:'SHA-256'}, km, {name:'AES-GCM', length:256}, false, ['encrypt']);
+  const gz = new Uint8Array(await new Response(new Blob([JSON.stringify(obj)]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
+  const ct = new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, gz));
+  return {v:1, kdf:'PBKDF2-SHA256', iter, salt:b64e(salt), iv:b64e(iv), gzip:true, ct:b64e(ct)};
+}
+const W = () => D.meta.write;
+const ghHeaders = () => ({'Authorization':'Bearer ' + W().token, 'Accept':'application/vnd.github+json', 'X-GitHub-Api-Version':'2022-11-28'});
+const ghUrl = () => `https://api.github.com/repos/${W().repo}/contents/${W().path}`;
+async function fetchBudgets(){
+  if (!PW) { try { return {data: JSON.parse(localStorage.getItem('fore-budgets-dev') || '{}'), sha:null}; } catch(e){ return {data:{}, sha:null}; } }
+  if (W()){
+    const r = await fetch(ghUrl() + '?ref=' + W().branch + '&t=' + Date.now(), {headers: ghHeaders(), cache:'no-store'});
+    if (r.status === 404) return {data:{}, sha:null};
+    if (!r.ok) throw new Error('GitHub ' + r.status);
+    const j = await r.json();
+    return {data: (await decrypt(JSON.parse(atob(j.content.replace(/\n/g,''))), PW)).courses || {}, sha: j.sha};
+  }
+  const r = await fetch('budgets.enc.json?v=' + Date.now());
+  if (!r.ok) return {data:{}, sha:null};
+  return {data: (await decrypt(await r.json(), PW)).courses || {}, sha:null};
+}
+async function loadBudgets(){
+  try { const b = await fetchBudgets(); BUD = b.data; BUD_SHA = b.sha; }
+  catch(e){ console.warn(e); toast('לא ניתן לטעון את התקציבים השמורים', true); }
+}
+function toast(msg, err){ const t = $('toast'); t.textContent = msg; t.className = 'toast on' + (err ? ' err' : ''); clearTimeout(t._h); t._h = setTimeout(() => t.className = 'toast', 3200); }
+function editorName(){
+  let n = null; try { n = localStorage.getItem('fore-editor'); } catch(e){}
+  if (!n){ n = (prompt('השם שלך (יופיע ביומן השינויים):') || '').trim() || 'צוות'; try { localStorage.setItem('fore-editor', n); } catch(e){} }
+  return n;
+}
+let SAVING = false;
+async function saveBudget(key, raw){
+  if (SAVING) return;          // Enter + click, or double click, must not save twice
+  SAVING = true;
+  try { await saveBudgetOnce(key, raw); } finally { SAVING = false; }
+}
+async function saveBudgetOnce(key, raw){
+  const val = String(raw ?? '').replace(/[^\d.]/g, '');
+  const amount = val ? Math.round(parseFloat(val)) : null;
+  const course = D.courses.find(c => bkey(c) === key);
+  const by = editorName(), at = new Date().toISOString();
+  const apply = data => { const d = {...data}; if (amount) d[key] = {budget: amount, by, at}; else delete d[key]; return d; };
+  if (!PW || !W()){
+    BUD = apply(BUD);
+    if (!PW) try { localStorage.setItem('fore-budgets-dev', JSON.stringify(BUD)); } catch(e){}
+    state.editing = null; render();
+    toast(PW ? 'נשמר בדפדפן הזה בלבד – שמירה משותפת עדיין לא הוגדרה' : 'נשמר מקומית (מצב פיתוח)', !!PW); return;
+  }
+  toast('שומר…');
+  for (let attempt = 0; attempt < 3; attempt++){
+    try {
+      const fresh = attempt ? await fetchBudgets() : {data: BUD, sha: BUD_SHA};
+      const next = apply(fresh.data);
+      const enc = await encryptJSON({courses: next, updated: at}, PW);
+      const body = {message: `budget: ${course ? course.name : key} = ${amount ?? 'removed'} (by ${by})`,
+                    content: btoa(JSON.stringify(enc)), branch: W().branch};
+      if (fresh.sha) body.sha = fresh.sha;
+      const r = await fetch(ghUrl(), {method:'PUT', headers: ghHeaders(), body: JSON.stringify(body)});
+      if (r.status === 409 || r.status === 422) continue;          // someone saved meanwhile -> merge & retry
+      if (!r.ok) throw new Error('GitHub ' + r.status);
+      const j = await r.json();
+      BUD = next; BUD_SHA = j.content.sha; state.editing = null; render();
+      toast(amount ? `התקציב נשמר: ₪${fmt.int(amount)}` : 'התקציב הידני נמחק');
+      return;
+    } catch(e){ console.warn(e); toast('השמירה נכשלה – נסו שוב', true); return; }
+  }
+  toast('השמירה נכשלה (התנגשות) – רעננו ונסו שוב', true);
+}
+
+function paceHtml(c){
+  if (c.brand) return `<div class="mt"><span>תקציב</span><b>—</b><small>ללא תקציב פרויקט</small></div>`;
+  const K = bkey(c), PRJ = MODE()==='project';
+  const monthName = PRJ ? new Date(D.meta.month + '-01T00:00:00').toLocaleString('he-IL',{month:'long'}) : '';
+  const editBtn = `<button class="bedit" data-edit="${esc(K)}" title="עריכת תקציב">✎ ${c.budget ? 'עריכה' : 'הזנת תקציב'}</button>`;
+  if (state.editing === K) return `<div class="mt" data-stop="1"><span>${PRJ ? `תקציב חודשי · ${monthName}` : 'תקציב הקורס (כל הפלטפורמות)'}</span>
+    <div class="bform"><input type="number" min="0" step="100" id="bIn" value="${BUD[K]?.budget ?? c.budgetName ?? ''}" placeholder="₪">
+      <button class="ok" data-save="${esc(K)}">שמירה</button><button class="no" data-cancel="1">ביטול</button>
+      ${BUD[K] ? `<button class="rm" data-clear="${esc(K)}">מחיקה</button>` : ''}</div>
+    <small>${c.budgetName ? `מהשמות: <span class="num">${fmt.ils(c.budgetName)}</span> · ` : ''}${PRJ ? 'לכל הפלטפורמות של הפרויקט בחודש הנוכחי' : 'תקציב ידני כולל את כל הפלטפורמות'}</small></div>`;
+  if (!c.budget) return `<div class="mt"><span>${PRJ ? `תקציב ${monthName}` : 'תקציב'} ${editBtn}</span><b>לא הוגדר</b><small>הוצא <span class="num">${fmt.ils(PRJ ? c.budgetSpent : c.spent)}</span>${PRJ ? ' החודש' : ''}${c.dailySet?` · יומי מוגדר ב-Meta <span class="num">${fmt.ils(c.dailySet)}</span>`:''}</small></div>`;
+  const used = c.budgetSpent / c.budget, exp = Math.min(1, c.elapsedPct ?? 1);
+  const cls = c.pace==null ? '' : c.pace > 1.15 ? 'bad' : c.pace < .8 && c.phase!=='ended' ? 'warn' : 'good';
+  const color = cls==='bad' ? 'var(--bad)' : cls==='warn' ? '#E9B824' : 'var(--good)';
+  const bm = BUD[K];
+  const src = c.budgetSource==='manual' ? `<span class="bsrc manual" title="${esc(bm && bm.by ? 'עודכן ע״י ' + bm.by + ' · ' + new Date(bm.at).toLocaleString('he-IL',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit'}) : '')}">ידני</span>` : `<span class="bsrc name">משם הקמפיין</span>`;
+  return `<div class="mt"><span>${PRJ ? `תקציב ${monthName}` : 'תקציב'} · ניצול ${src} ${editBtn}</span>
+    <b class="num">${fmt.ils(c.budgetSpent)}</b> <small style="display:inline">מתוך <span class="num">${fmt.ils(c.budget)}</span></small>
+    <div class="pace" title="הקו הכהה = כמה היה צריך לצאת עד היום"><i style="width:${Math.min(100,used*100)}%;background:${color}"></i>${c.phase!=='ended'?`<u style="right:${exp*100}%"></u>`:''}</div>
+    <div class="pace-lbl"><span>${(used*100).toFixed(0)}% נוצל</span>${c.pace!=null && c.phase!=='ended'?`<span class="${cls}">קצב ${(c.pace*100).toFixed(0)}%</span>`:''}</div></div>`;
+}
+function dailyHtml(c){
+  if (c.phase==='ended' || c.brand) return `<div class="mt"><span>ממוצע יומי (7 ימים)</span><b class="num">${fmt.ils(c.avg7)}</b></div>`;
+  if (c.requiredDaily==null) return `<div class="mt"><span>ממוצע יומי (7 ימים)</span><b class="num">${fmt.ils(c.avg7)}</b>${c.dailySet?`<small>יומי מוגדר ב-Meta <span class="num">${fmt.ils(c.dailySet)}</span></small>`:''}</div>`;
+  const ratio = c.budgetAvg7 / (c.requiredDaily || 1);
+  const cls = c.requiredDaily===0 ? 'bad' : ratio > 1.2 ? 'bad' : ratio < .8 ? 'warn' : 'good';
+  return `<div class="mt"><span>${MODE()==='project' ? 'נדרש ליום עד סוף החודש' : 'נדרש ליום · בפועל'}</span><b class="num">${fmt.ils(c.requiredDaily)}</b>
+    <small>בפועל (7 ימים) <span class="num ${cls}">${fmt.ils(c.budgetAvg7)}</span></small></div>`;
+}
+
+function renderCourses(cp, inP){
+  const f = MODE()==='project' ? 'all' : state.courseFilter;
+  $('courseSeg').style.display = MODE()==='project' ? 'none' : '';
+  const isActive = c => c.phase !== 'ended';
+  const counts = {active:D.courses.filter(isActive).length, ended:D.courses.filter(c=>!isActive(c)).length, all:D.courses.length};
+  $('courseSeg').innerHTML = [['active','פעילים ועתידיים'],['ended','הסתיימו'],['all','הכל']]
+    .map(([k,l]) => `<button class="${f===k?'on':''}" data-k="${k}">${l}<span class="c">${counts[k]}</span></button>`).join('');
+  $('courseSeg').querySelectorAll('button').forEach(b => b.onclick = () => { state.courseFilter = b.dataset.k; render(); });
+
+  const list = D.courses.map((c,i) => ({...c, ...budgetInfo(c), i})).filter(c => f==='all' || (f==='active' ? isActive(c) : !isActive(c)));
+  // unit totals per period
+  const ut = D.units.map(zero);
+  for (const [d,ui,i,k,l,s] of D.unitRows) if (inP(d)) add(ut[ui],i,k,l,s);
+  ut.forEach(derive);
+
+  $('courses').innerHTML = list.length ? list.map(c => {
+    const per = zero(); c.campaigns.forEach(ci => { add(per, cp[ci].i, cp[ci].k, cp[ci].l, cp[ci].s); per.v += cp[ci].v; per.r += cp[ci].r; }); derive(per); vderive(per);
+    const PRJ = MODE()==='project';
+    const plats = PL.filter(p => c.campaigns.some(ci => D.campaigns[ci].p===p));
+    const when = PRJ ? `${c.campaigns.filter(ci => !D.campaigns[ci].pseudo).length} קמפיינים` : c.start ? (c.phase==='ended' ? `נפתח ${fmt.date(c.start)}` :
+      c.daysLeft===0 ? `נפתח היום (${fmt.date(c.start)})` : `נפתח ${fmt.date(c.start)} · בעוד ${c.daysLeft} ימים`) : 'ללא מועד';
+    const open = state.open.has(c.key);
+    return `<div class="card course ${open?'open':''}" data-key="${esc(c.key)}">
+      <div class="ch">
+        <div class="cn"><b>${esc(c.name)}</b><div class="sub"><span class="st ${c.phase}">${ST[c.phase]}</span><span>${when}</span>
+          <span class="pdots">${plats.map(p => `<i style="background:${PLAT[p].color}" title="${PLAT[p].name}"></i>`).join('')}</span>
+          <span>${c.live} באוויר</span></div></div>
+        ${paceHtml(c)}
+        ${dailyHtml(c)}
+        ${PRJ ? `<div class="mt"><span>בתקופה · ${VLAB()}</span><b class="num">${fmt.int(per.v)}</b><small><span class="num">${fmt.ils(per.s)}</span> · ${K().type==='traffic'?'CPC':'CPA'} <span class="num">${or(per.vcpl,fmt.ils2)}</span>${VL() ? ` · בפלטפורמה ${fmt.int(per.l)}` : ''}${K().value ? ` · ROAS ${or(roas(per), v => v.toFixed(2))}` : ''}</small></div>
+        <div class="mt"><span>מתחילת החודש</span><b class="num">${fmt.int(c.monthValid)} ${VL() ? 'תקינים' : K().label}</b><small><span class="num">${fmt.ils(c.budgetSpent ?? c.monthSpent)}</span> · ${K().type==="traffic"?"CPC":"CPA"} <span class="num">${or((c.budgetSpent ?? c.monthSpent) / c.monthValid, fmt.ils2)}</span></small></div>`
+        : `<div class="mt"><span>בתקופה</span><b class="num">${fmt.int(per.l)} ${K().label}</b><small><span class="num">${fmt.ils(per.s)}</span> · CPL <span class="num">${or(per.cpl,fmt.ils2)}</span></small></div>
+        <div class="mt"><span>מצטבר לקורס</span><b class="num">${fmt.int(c.leads)} ${K().label}</b><small><span class="num">${fmt.ils(c.spent)}</span> · CPL <span class="num">${or(c.cpl,fmt.ils2)}</span></small></div>`}
+        <span class="chev">▾</span>
+      </div>
+      <div class="cb">${open ? courseBody(c, cp, ut) : ''}</div></div>`;
+  }).join('') : `<div class="card empty">אין ${MODE()==='project' ? 'פרויקטים' : 'קורסים'} בקטגוריה הזו</div>`;
+  const C = $('courses');
+  C.querySelectorAll('[data-edit]').forEach(b => b.onclick = e => { e.stopPropagation(); state.editing = b.dataset.edit; renderCourses(cp, inP);
+    const i = $('bIn'); if (i){ i.focus(); i.select(); } });
+  C.querySelectorAll('[data-stop]').forEach(el => el.onclick = e => e.stopPropagation());
+  C.querySelectorAll('[data-cancel]').forEach(b => b.onclick = e => { e.stopPropagation(); state.editing = null; renderCourses(cp, inP); });
+  C.querySelectorAll('[data-save]').forEach(b => b.onclick = e => { e.stopPropagation(); saveBudget(b.dataset.save, $('bIn').value); });
+  C.querySelectorAll('[data-clear]').forEach(b => b.onclick = e => { e.stopPropagation(); saveBudget(b.dataset.clear, ''); });
+  const bi = $('bIn'); if (bi) bi.onkeydown = e => { if (e.key==='Enter') saveBudget(state.editing, bi.value); if (e.key==='Escape'){ state.editing = null; renderCourses(cp, inP); } };
+  $('courses').querySelectorAll('.course .ch').forEach(h => h.onclick = () => {
+    const k = h.parentElement.dataset.key; state.open.has(k) ? state.open.delete(k) : state.open.add(k); renderCourses(cp, inP);
+  });
+  $('courses').querySelectorAll('.more').forEach(b => b.onclick = e => { e.stopPropagation(); const k = b.dataset.k;
+    state.more.has(k) ? state.more.delete(k) : state.more.add(k); renderCourses(cp, inP); });
+}
+
+function courseBody(c, cp, ut){
+  const byP = Object.fromEntries(PL.map(p => [p, zero()]));
+  c.campaigns.forEach(ci => { const t = cp[ci]; add(byP[D.campaigns[ci].p], t.i,t.k,t.l,t.s); byP[D.campaigns[ci].p].v += t.v; byP[D.campaigns[ci].p].r += t.r; });
+  PL.forEach(p => { derive(byP[p]); vderive(byP[p]); });
+  const PRJ = MODE()==='project';
+  const mk = PL.filter(p => c.campaigns.some(ci => D.campaigns[ci].p===p)).map(p =>
+    PRJ ? `<div>${pIcon(p)}<span style="display:inline">${PLAT[p].name}</span><b class="num" style="display:block">${fmt.ils(byP[p].s)} · ${fmt.int(byP[p].v)} ${VL() ? 'תקינים' : K().label}</b>
+      <span>${VCPA()} ${or(byP[p].vcpl,fmt.ils2)}${VL() ? ` · בפלטפורמה ${fmt.int(byP[p].l)}` : ''}${K().value ? ` · ROAS ${or(roas(byP[p]), v => v.toFixed(2))}` : ''}</span></div>`
+    : `<div>${pIcon(p)}<span style="display:inline">${PLAT[p].name}</span><b class="num" style="display:block">${fmt.ils(byP[p].s)} · ${fmt.int(byP[p].l)} ${K().label}</b>
+      <span>CPL ${or(byP[p].cpl,fmt.ils2)} · CTR ${or(byP[p].ctr,fmt.pct)}</span></div>`).join('');
+  let audTab = '';
+  if (PRJ){
+    const A = {};
+    c.campaigns.forEach(ci => { const m = D.campaigns[ci], t = cp[ci], a = (A[m.aud] ||= zero()); add(a,t.i,t.k,t.l,t.s); a.v += t.v; a.r += t.r; });
+    const rows_ = Object.entries(A).map(([k,t]) => [k, vderive(derive(t))]).filter(([,t]) => t.s || t.v).sort((x,y) => y[1].s - x[1].s);
+    audTab = rows_.length > 1 ? `<h5>לפי קהל</h5><div class="tbl-wrap"><table style="min-width:640px"><thead><tr><th>קהל</th><th>השקעה</th><th>חשיפות</th><th>הקלקות</th><th class="hl">${VLAB()}</th><th class="hl">${VCPA()}</th><th class="vl">לידים בפלטפורמה</th><th class="vl">% תקינים</th><th class="val">הכנסות</th><th class="val">ROAS</th></tr></thead><tbody>${
+      rows_.map(([k,t]) => `<tr><td><b>${esc(k)}</b></td><td class="num">${fmt.ils(t.s)}</td><td class="num">${fmt.int(t.i)}</td><td class="num">${fmt.int(t.k)}</td>
+        <td class="num hl"><b>${fmt.int(t.v)}</b></td><td class="num hl">${or(t.vcpl,fmt.ils2)}</td><td class="num vl">${fmt.int(t.l)}</td><td class="num vl">${or(t.vr,fmt.pct)}</td><td class="num val">${fmt.ils(t.r)}</td><td class="num val">${or(roas(t), v => v.toFixed(2))}</td></tr>`).join('')}</tbody></table></div>` : '';
+  }
+  const camps = c.campaigns.slice().sort((x,y) => cp[y].s - cp[x].s);
+  const ctab = `<table><thead><tr><th>קמפיין</th><th>סטטוס</th><th>${PRJ ? 'קהל' : 'תקציב (שם)'}</th><th>יומי מוגדר</th><th>השקעה</th><th>חשיפות</th><th>הקלקות</th><th>CTR</th>
+      ${PRJ ? `<th class="hl">${VLAB()}</th><th class="hl">${VCPA()}</th><th class="vl">בפלטפורמה</th>` : `<th class="hl">${K().label}</th><th class="hl">${K().cpa}</th><th>${K().rate}</th>`}<th class="val">הכנסות</th><th class="val">ROAS</th></tr></thead><tbody>${camps.filter(ci => !PRJ || cp[ci].s || cp[ci].v || cp[ci].i).map(ci => {
+      const m = D.campaigns[ci], t = cp[ci];
+      return `<tr><td class="nm">${pIcon(m.p)}<b style="display:inline">${m.url ? `<a class="cl" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer" title="פתיחה ב-${LINK_HE.manage[m.p]}">${esc(cleanName(m.name))}</a>` : esc(cleanName(m.name))}</b><br><small>${m.type?`<span class="tag">${TYPE_HE[m.type]||m.type}</span>`:''}${m.end?`סיום ${fmt.date(m.end)}`:''}</small></td>
+        <td>${m.status?`<span class="st ${m.status}">${ST[m.status]}</span>`:'—'}</td>
+        <td class="${PRJ ? '' : 'num'}">${PRJ ? esc(m.aud || '—') : or(m.budget,fmt.ils)}</td><td class="num">${or(m.daily,fmt.ils)}</td>
+        <td class="num">${fmt.ils(t.s)}</td><td class="num">${fmt.int(t.i)}</td><td class="num">${fmt.int(t.k)}</td><td class="num">${or(t.ctr,fmt.pct)}</td>
+        ${PRJ ? `<td class="num hl"><b>${fmt.int(t.v)}</b></td><td class="num hl">${or(t.vcpl,fmt.ils2)}</td><td class="num vl">${fmt.int(t.l)}</td>`
+              : `<td class="num hl"><b>${fmt.int(t.l)}</b></td><td class="num hl">${or(t.cpl,fmt.ils2)}</td><td class="num">${or(t.cr,fmt.pct)}</td>`}<td class="num val">${fmt.ils(t.r)}</td><td class="num val">${or(roas(t), v => v.toFixed(2))}</td></tr>`; }).join('')}</tbody></table>`;
+
+  const set = new Set(c.campaigns);
+  const units = D.units.map((u,i) => ({...u, t:ut[i]})).filter(u => set.has(u.c) && (u.t.i || u.t.s)).sort((x,y) => y.t.s - x.t.s);
+  const all = state.more.has(c.key), shown = all ? units : units.slice(0, 12);
+  const utab = units.length ? `<table><thead><tr><th>מודעה / סט</th><th>פלטפורמה</th><th>השקעה</th><th>חשיפות</th><th>הקלקות</th><th>CTR</th>
+      <th class="hl">${VL() ? 'לידים בפלטפורמה' : K().label}</th><th class="hl">${K().cpa}</th><th>${K().rate}</th></tr></thead><tbody>${shown.map(u => {
+      const t = u.t, title = u.ad || u.set;
+      const L = u.links || {};
+      let img = u.p==='meta' ? (u.thumb ? `<img src="${esc(u.thumb)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ph',textContent:'—'}))">` : `<span class="ph">—</span>`) : '';
+      if (img && L.preview) img = `<a href="${esc(L.preview)}" target="_blank" rel="noopener noreferrer" title="תצוגת מודעה">${img}</a>`;
+      const links = `<span class="lk">${ext(L.preview, LINK_HE.preview, 'pv')}${ext(L.post, LINK_HE.post, 'pv')}${ext(L.manage, LINK_HE.manage[u.p])}</span>`;
+      return `<tr><td><div class="ad">${img}<div class="nm"><b>${esc(title)}</b><small>${u.ad ? (u.p==='linkedin' ? 'קריאייטיב' : 'סט: '+esc(u.set)) : 'קבוצת מודעות'}${u.setStatus?` · ${esc(String(u.setStatus).toLowerCase())}`:''}</small>${links}</div></div></td>
+        <td>${pIcon(u.p)}</td><td class="num">${fmt.ils(t.s)}</td><td class="num">${fmt.int(t.i)}</td><td class="num">${fmt.int(t.k)}</td><td class="num">${or(t.ctr,fmt.pct)}</td>
+        <td class="num hl"><b>${fmt.int(t.l)}</b></td><td class="num hl">${or(t.cpl,fmt.ils2)}</td><td class="num">${or(t.cr,fmt.pct)}</td></tr>`; }).join('')}</tbody></table>` : '';
+  return `<div class="mini-kpis">${mk}</div>
+    ${audTab}<h5>קמפיינים בתקופה</h5><div class="tbl-wrap">${ctab}</div>
+    <h5>סטים, קבוצות מודעות ומודעות</h5>${units.length ? `<div class="tbl-wrap">${utab}</div>
+    ${units.length > 12 ? `<button class="more" data-k="${esc(c.key)}">${all ? 'הצג פחות' : `הצג את כל ${units.length}`}</button>` : ''}` : `<div class="empty">אין נתוני מודעות בתקופה הזו</div>`}`;
+}
+
+function renderBreakdowns(inP){
+  const plats = [['meta','Meta'],['google','Google'],['linkedin','LinkedIn']].filter(([k]) => D.campaigns.some(c => c.p===k));
+  if (!plats.some(([k]) => k===state.bdPlat) && plats.length) state.bdPlat = plats[0][0];
+  $('bdPlat').closest('.section').style.display = plats.length ? '' : 'none';
+  $('bdPlat').innerHTML = plats.map(([k,l]) => `<button class="${state.bdPlat===k?'on':''}" data-k="${k}">${l}</button>`).join('');
+  $('bdPlat').querySelectorAll('button').forEach(b => b.onclick = () => { state.bdPlat = b.dataset.k; render(); });
+  const p = state.bdPlat;
+  const sel = $('bdCourse');
+  const opts = [['all','כל הקורסים'],['live','קורסים פעילים בלבד'], ...D.courses.map((c,i) => [String(i), c.name + (c.start?` (${fmt.date(c.start)})`:'')])];
+  sel.innerHTML = opts.map(([v,l]) => `<option value="${v}" ${state.bdCourse===v?'selected':''}>${esc(l)}</option>`).join('');
+  sel.disabled = p==='linkedin';
+  sel.onchange = () => { state.bdCourse = sel.value; render(); };
+  const okCamp = ci => { const c = D.campaigns[ci]; if (c.p!==p) return false;
+    if (state.bdCourse==='all') return true; if (state.bdCourse==='live') return D.courses[c.course].phase!=='ended';
+    return String(c.course) === state.bdCourse; };
+
+  const panel = (title, name, mapLabel) => {
+    const dims = D.dims[name] || [], tot = dims.map(zero);
+    for (const [d,ci,di,i,k,l,s] of (D.breakdowns[name]||[])) if (inP(d) && okCamp(ci)) add(tot[di],i,k,l,s);
+    const merged = {};
+    tot.forEach((t,di) => { const lab = mapLabel(dims[di]); const m = merged[lab] ||= zero(); add(m,t.i,t.k,t.l,t.s); });
+    return rowsPanel(title, Object.entries(merged).map(([l,t]) => [l, derive(t)]));
+  };
+  let html = '', note = '';
+  const [a] = range();
+  if (a < D.meta.detailFrom) note = `פילוחים זמינים מ-${fmt.date(D.meta.detailFrom)} בלבד; התקופה שנבחרה מתחילה לפני כן.`;
+  if (p==='meta'){
+    html = panel('פלטפורמה ומיקום', 'meta_place', s => { const [pp,pos] = s.split('·'); return `${he(pp)} · ${he(pos)}`; })
+      + panel('פלטפורמה', 'meta_place', s => he(s.split('·')[0]))
+      + panel('גיל', 'meta_age', s => s) + panel('מגדר', 'meta_gender', s => he(s)) + panel('מכשיר', 'meta_device', s => he(s));
+  } else if (p==='google'){
+    html = panel('מכשיר', 'google_device', s => he(s));
+  } else {
+    const k = state.key==='custom' ? null : state.key;
+    const demo = k && D.liDemo && D.liDemo[k];
+    if (!demo) { html = `<div class="card empty" style="grid-column:1/-1">פילוח LinkedIn זמין לתקופות המוגדרות מראש (לא בטווח ידני) ומתעדכן בהרצה האוטומטית.</div>`; }
+    else {
+      const conv = rows => rows.map(([l,i,k,ld,s]) => [l, derive({i,k,l:ld,s})]);
+      html = rowsPanel('תפקיד', conv(demo.func)) + rowsPanel('בכירות', conv(demo.senior));
+      note = 'פילוח LinkedIn הוא ברמת החשבון כולו (LinkedIn לא מאפשר פילוח דמוגרפי לפי קמפיין).';
+    }
+  }
+  $('bd').innerHTML = html; $('bdNote').textContent = note;
+}
+function rowsPanel(title, entries){
+  entries = entries.filter(([,t]) => t.s > 0 || t.l > 0).sort((x,y) => y[1].s - x[1].s);
+  if (!entries.length) return `<div class="card bd"><h4>${title}</h4><div class="empty">אין נתונים</div></div>`;
+  const max = Math.max(...entries.map(([,t]) => t.s)), tot = entries.reduce((s,[,t]) => s+t.s, 0);
+  return `<div class="card bd"><h4>${title}</h4>
+    <div class="row hd"><span></span><span>השקעה</span><span>${VL() ? 'לידים (פלטפ׳)' : K().label}</span><span>${K().cpa}</span><span>CTR</span></div>
+    ${entries.slice(0, 12).map(([l,t]) => `<div class="row"><span>${esc(l)}</span>
+      <div><div class="bar"><i style="width:${t.s/max*100}%;background:${PLAT[state.bdPlat].color}"></i></div>
+        <small class="num" style="color:var(--mute-2)">${fmt.ils(t.s)} · ${(t.s/tot*100).toFixed(0)}%</small></div>
+      <b class="num">${fmt.int(t.l)}</b><span class="num">${or(t.cpl,fmt.ils2)}</span><span class="num">${or(t.ctr,fmt.pct)}</span></div>`).join('')}</div>`;
+}
+
+boot();
+</script>
+</body>
+</html>

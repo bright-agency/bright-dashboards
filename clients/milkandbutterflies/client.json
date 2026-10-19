@@ -1,0 +1,43 @@
+{
+  "slug": "milkandbutterflies",
+  "name": "Milk and Butterflies",
+  "status": "active",
+  "owner": "TBD",
+  "accounts": {
+    "meta": [
+      {
+        "id": "28945428411721154",
+        "currency": "USD"
+      }
+    ],
+    "google": [
+      {
+        "id": "648-149-5990",
+        "currency": "ILS"
+      }
+    ]
+  },
+  "kpi": {
+    "type": "purchase",
+    "meta": "actions_omni_purchase",
+    "meta_value": "action_values_omni_purchase",
+    "google": "conversions",
+    "google_value": "conversion_value",
+    "linkedin": "externalwebsiteconversions",
+    "tiktok": "complete_payment",
+    "tiktok_value": "total_complete_payment_rate"
+  },
+  "grouping": {
+    "mode": "project"
+  },
+  "history_start": "2026-01-01",
+  "detail_days": 120,
+  "key_version": 1,
+  "alerts": {
+    "no_leads_min_spend": 300,
+    "cpl_rise_ratio": 1.3,
+    "meta_frequency_max": 3.5,
+    "pace_low": 0.8,
+    "pace_high": 1.15
+  }
+}

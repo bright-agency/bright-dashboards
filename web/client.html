@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>דשבורד מדיה · BRIGHT</title>
+<link rel="icon" href="../assets/bright-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* BRIGHT palette */
+  --bg:#F4F4F2; --surface:#FFFFFF; --surface-2:#FAFAF8; --ink:#141B34; --mute:#6E6E73; --mute-2:#7A7A72;
+  --hair:#E4E4E0; --hair-2:#ECECE8;
+  --navy:#141B34; --navy-2:#1E2748; --yellow:#FBDD5C; --yellow-soft:#FDF8E6; --yellow-2:#FDF3C7;
+  --good:#1F9D57; --good-bg:#D8F0E2; --bad:#D64545; --bad-bg:#FBE6E6;
+  --c-meta:#141B34; --c-google:#E9B824; --c-linkedin:#5B8DB8; --c-leads:#1F9D57;
+  --shadow:0 1px 0 rgba(20,27,52,.03),0 10px 28px -14px rgba(20,27,52,.18); --r:16px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Assistant,"Arial Hebrew",Arial,sans-serif;font-size:15.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1280px;margin:0 auto;padding:0 28px}
+.num{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+
+/* masthead */
+.mast{background:var(--navy);color:#E9EAF0;padding:24px 0 98px;position:relative;overflow:hidden}
+.mast::after{content:"";position:absolute;inset:auto 0 0 0;height:4px;background:var(--yellow)}
+.mast .wrap{position:relative;z-index:1}
+.top{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.client{display:flex;align-items:center;gap:18px}
+.client-logo{background:#fff;border-radius:14px;padding:10px 16px;display:flex;align-items:center}
+.client-logo img{height:48px;display:block}
+.title .eyebrow{color:var(--yellow);font-size:13px;font-weight:700;letter-spacing:.02em}
+.title h1{font-weight:800;font-size:32px;line-height:1.1;margin:2px 0 0;color:#fff}
+.agency{display:flex;align-items:center;gap:12px}
+.agency img{width:46px;height:46px;border-radius:50%;background:#000;box-shadow:0 0 0 2px var(--yellow)}
+.agency .t{font-size:12.5px;color:#B9BCCB;line-height:1.5}
+.agency .t b{color:#fff;font-weight:700;letter-spacing:.18em;font-size:14px;display:block;direction:ltr;text-align:right}
+
+.periods{margin-top:28px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{border:1px solid rgba(255,255,255,.2);background:transparent;color:#DDE0EA;padding:8px 17px;border-radius:999px;font:inherit;font-size:14.5px;font-weight:500;cursor:pointer;transition:.15s}
+.chip:hover{border-color:rgba(255,255,255,.5);color:#fff}
+.chip.on{background:var(--yellow);color:var(--navy);border-color:var(--yellow);font-weight:700}
+.custom{display:flex;align-items:center;gap:6px;margin-inline-start:4px;padding:4px 6px 4px 12px;border-radius:999px;border:1px dashed rgba(255,255,255,.3)}
+.custom.on{background:var(--yellow);border:1px solid var(--yellow)}
+.custom span{font-size:13.5px;color:#B9BCCB}
+.custom.on span{color:var(--navy);font-weight:600}
+.custom input{font:inherit;font-size:13px;border:0;border-radius:999px;padding:5px 10px;background:#fff;color:var(--ink)}
+.range{margin-top:14px;color:#B9BCCB;font-size:13.5px}
+.range b{color:#fff;font-weight:600}
+
+main{margin-top:-60px;padding-bottom:56px;position:relative;z-index:2}
+.card{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);border:1px solid var(--hair)}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi{padding:18px 20px 16px;position:relative;overflow:hidden}
+.kpi .lbl{font-size:14px;color:var(--mute);font-weight:600}
+.kpi .lbl small{color:var(--mute-2);font-weight:400}
+.kpi .val{font-size:34px;font-weight:800;margin-top:2px;letter-spacing:-.5px;color:var(--ink);line-height:1.15}
+.kpi .sub{margin-top:5px;font-size:12.5px;color:var(--mute-2);display:flex;gap:8px;align-items:center;flex-wrap:wrap;min-height:22px}
+.kpi.hero{background:linear-gradient(180deg,var(--yellow-soft),#fff 70%)}
+.kpi.hero::before{content:"";position:absolute;top:0;inset-inline-start:0;width:100%;height:4px;background:var(--yellow)}
+.delta{display:inline-flex;align-items:center;gap:3px;font-weight:700;font-size:12px;padding:2px 8px;border-radius:999px;direction:ltr}
+.delta.up{color:var(--good);background:var(--good-bg)}.delta.down{color:var(--bad);background:var(--bad-bg)}.delta.flat{color:var(--mute-2);background:var(--hair-2)}
+.split{display:flex;height:6px;border-radius:9px;overflow:hidden;margin-top:12px;background:var(--hair-2);gap:2px}
+.split i{display:block;height:100%}
+.plist{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--mute);margin-top:7px}
+.plist span{display:inline-flex;align-items:center;gap:5px}
+.plist i{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+/* sections */
+.section{margin-top:28px}
+.sec-h{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin:0 2px 12px;flex-wrap:wrap}
+.sec-h h2{margin:0;font-size:24px;font-weight:800;display:flex;align-items:center;gap:10px}
+.sec-h h2::before{content:"";width:6px;height:22px;border-radius:3px;background:var(--yellow)}
+.sec-h p{margin:2px 0 0;color:var(--mute-2);font-size:13.5px}
+
+.share{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:14px}
+.sh{padding:18px 20px 16px;cursor:pointer;transition:transform .15s, box-shadow .15s;position:relative;overflow:hidden}
+.sh:hover{transform:translateY(-2px);box-shadow:0 14px 30px -14px rgba(20,27,52,.28)}
+.sh.on{outline:2px solid var(--yellow);outline-offset:-2px}
+.sh-h{display:flex;align-items:center;gap:12px}
+.sh-share{margin-right:auto;background:var(--navy);color:#fff;border-radius:999px;padding:3px 12px;font-weight:800;font-size:15px}
+.sh-stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:16px;border-top:1px solid var(--hair-2)}
+.sh-stats div{padding:12px 0 2px;text-align:start}
+.sh-stats div+div{border-inline-start:1px solid var(--hair-2);padding-inline-start:14px}
+.sh-stats span{display:block;font-size:12.5px;color:var(--mute-2);font-weight:600}
+.sh-stats b{display:block;font-size:24px;font-weight:800;line-height:1.2;margin-top:2px;text-align:start}
+.sh-bars{margin-top:14px;display:grid;gap:8px}
+.sh-bar{display:grid;grid-template-columns:78px 1fr 40px;align-items:center;gap:10px;font-size:12.5px;color:var(--mute)}
+.sh-bar .tr{height:7px;border-radius:9px;background:var(--hair-2);overflow:hidden}
+.sh-bar .tr i{display:block;height:100%;border-radius:9px}
+.sh-bar b{color:var(--ink);font-weight:800;text-align:left}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.tab{display:flex;align-items:center;gap:10px;border:1px solid var(--hair);background:#fff;border-radius:14px;padding:8px 16px 8px 10px;font:inherit;cursor:pointer;color:var(--ink);transition:.15s}
+.tab .ic{width:34px;height:34px;border-radius:10px}
+.tab .ic svg{width:18px;height:18px}
+.tab b{font-size:15.5px;font-weight:800;display:block;text-align:start}
+.tab small{font-size:12px;color:var(--mute-2);display:block;text-align:start}
+.tab:hover{border-color:var(--navy)}
+.tab.on{background:var(--navy);border-color:var(--navy);color:#fff;box-shadow:0 8px 22px -10px rgba(20,27,52,.5)}
+.tab.on small{color:#C9CCD8}
+.tab.on .ic{background:var(--yellow)}
+.ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none}
+.ic.meta{background:#E9EAF0}.ic.google{background:var(--yellow-2)}.ic.linkedin{background:#E5EEF6}
+.sh h4{margin:0;font-size:18px;font-weight:800}
+
+
+/* platform cards */
+.plat{padding:0;overflow:hidden}
+.plat-h{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;border-bottom:1px solid var(--hair);flex-wrap:wrap}
+.plat-t{display:flex;align-items:center;gap:12px}
+.plat-t h3{margin:0;font-size:21px;font-weight:800}
+.plat-t p{margin:0;font-size:13px;color:var(--mute-2)}
+.plat-badge{font-size:12.5px;color:var(--navy);background:var(--yellow-soft);border:1px solid var(--yellow-2);padding:4px 11px;border-radius:999px;font-weight:600}
+.mini{display:grid;grid-template-columns:repeat(8,1fr);border-bottom:1px solid var(--hair);background:var(--surface-2)}
+.mini div{padding:14px 16px;border-inline-start:1px solid var(--hair-2)}
+.mini div:first-child{border-inline-start:0}
+.mini span{display:block;font-size:12.5px;color:var(--mute-2)}
+.mini b{display:block;font-size:19px;font-weight:800;margin-top:1px}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;min-width:1040px}
+th{font-weight:700;color:var(--navy);font-size:13px;text-align:start;padding:12px 14px;background:#EEF0F4;border-bottom:2px solid #D9DCE6;white-space:nowrap;cursor:pointer;user-select:none}
+th:hover{color:var(--ink)}
+th.sorted{color:var(--ink);font-weight:700}
+th.sorted::after{content:" ▾";font-size:10px}
+th.sorted.asc::after{content:" ▴"}
+td{padding:13px 14px;border-bottom:1px solid var(--hair-2);white-space:nowrap}
+th+th,td+td{border-inline-start:1px solid #EEEEEA}
+tbody tr:nth-child(even) td{background:#FAFAF7}
+tbody td.n:nth-child(even){background-image:linear-gradient(rgba(20,27,52,.025),rgba(20,27,52,.025))}
+th.hl{background:#FBF1C4}
+td.hl{background-image:linear-gradient(rgba(251,221,92,.16),rgba(251,221,92,.16))!important}
+tbody tr:hover td{background-color:#F3F6FB}
+tbody tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:center}
+.course{white-space:normal;min-width:260px;max-width:380px}
+.course b{font-weight:700;display:block;line-height:1.35}
+.tags{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap}
+.tag{font-size:11.5px;padding:1px 8px;border-radius:6px;background:var(--hair-2);color:var(--mute)}
+.tag.t-lead{background:var(--good-bg);color:#17784A}.tag.t-brand{background:var(--yellow-2);color:#7A5A00}.tag.t-search{background:#E9EAF0;color:var(--navy)}
+.st{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;padding:1px 9px 1px 8px;border-radius:999px;margin-bottom:5px}
+.st::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.st.live{background:var(--good-bg);color:#17784A}.st.live::before{box-shadow:0 0 0 3px rgba(31,157,87,.18)}
+.st.paused{background:#FDF3C7;color:#8A6400}
+.st.ended{background:var(--hair-2);color:var(--mute)}
+tr.is-ended .course b{color:var(--mute)}
+.tag.t-date{background:transparent;border:1px solid var(--hair);color:var(--mute-2)}
+.bar{height:4px;border-radius:4px;background:var(--hair-2);margin:6px auto 0;overflow:hidden;width:90px}
+.bar i{display:block;height:100%}
+tfoot td{font-weight:800;background:#EEF0F4!important;border-top:2px solid #D9DCE6;border-bottom:0}
+.muted{color:var(--mute-2)}
+.empty{padding:28px;text-align:center;color:var(--mute-2)}
+.foot{margin-top:32px;padding-top:18px;border-top:1px solid var(--hair);color:var(--mute-2);font-size:13px;line-height:1.75;display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap}
+.foot .defs{max-width:860px}
+.foot b{color:var(--ink);font-weight:700}
+.foot .sig{display:flex;align-items:center;gap:10px;color:var(--ink);font-size:12.5px}
+.foot .sig img{width:34px;height:34px;border-radius:50%}
+
+@media (max-width:1100px){.mini{grid-template-columns:repeat(4,1fr)}.mini div:nth-child(5){border-inline-start:0}.mini div:nth-child(-n+4){border-bottom:1px solid var(--hair-2)}}
+@media (max-width:1000px){.share{grid-template-columns:1fr}}
+@media (max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){
+  .wrap{padding:0 16px}
+  .mast{padding:18px 0 86px}
+  .client{gap:12px}.client-logo{padding:8px 10px}.client-logo img{height:34px}.title h1{font-size:24px}
+  .kpi .val{font-size:26px}.kpi{padding:14px 14px 12px}
+  .mini{grid-template-columns:repeat(2,1fr)}.mini div{border-bottom:1px solid var(--hair-2)}.mini div:nth-child(odd){border-inline-start:0}
+  /* header */
+  .top{gap:14px}
+  .client{width:100%;justify-content:space-between}
+  .title{order:-1}
+  .agency{width:100%;justify-content:space-between;flex-direction:row-reverse;border-top:1px solid rgba(255,255,255,.1);padding-top:12px}
+  .agency img{width:36px;height:36px}
+  .agency .t b{text-align:left}
+  /* periods: one swipeable row + date range below */
+  .periods{flex-wrap:nowrap;overflow-x:auto;margin:20px -16px 0;padding:0 16px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .periods::-webkit-scrollbar{display:none}
+  .chip{flex:none;padding:7px 14px;font-size:14px}
+  .custom{flex:none;margin-inline-start:0}
+  .custom span:first-child{display:none}
+  .custom input{width:128px;padding:5px 8px}
+  .range{font-size:12.5px;line-height:1.6}
+  /* KPI */
+  .kpis{gap:10px}
+  .kpi .lbl{font-size:13px}
+  .kpi .sub span{display:none}
+  .plist{gap:4px 10px;font-size:11.5px}
+  /* share cards */
+  .sh{padding:14px 14px 12px}
+  .sh-stats b{font-size:19px}
+  .sh-stats div+div{padding-inline-start:10px}
+  .sh-bar{grid-template-columns:62px 1fr 36px}
+  /* tabs: 3 equal buttons */
+  .tabs{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:8px}
+  .tab{flex-direction:column;gap:6px;padding:10px 6px;text-align:center}
+  .tab b{font-size:13.5px;text-align:center}
+  .tab small{display:none}
+  /* platform card */
+  .plat-h{padding:14px 16px}
+  .plat-t h3{font-size:19px}
+  .plat-badge{font-size:12px}
+  .mini div{padding:12px 14px}
+  .mini b{font-size:17px}
+  /* campaign table -> cards */
+  .tbl-wrap{overflow:visible}
+  table{min-width:0;font-size:14px}
+  thead,tfoot{display:none}
+  table,tbody,tr,td{display:block;width:100%}
+  tbody tr{padding:14px 16px;border-bottom:8px solid var(--bg);display:grid;grid-template-columns:repeat(3,1fr);gap:10px 8px}
+  tbody tr:last-child{border-bottom:0}
+  tbody tr:hover{background:transparent}
+  td{padding:0;border:0;white-space:normal;direction:rtl;text-align:right!important}
+  td.course{grid-column:1/-1;max-width:none;min-width:0;padding-bottom:8px;border-bottom:1px solid var(--hair-2)}
+  td[data-l]::before{content:attr(data-l);display:block;font-size:11.5px;color:var(--mute-2);font-weight:600;margin-bottom:1px}
+  td[data-l]{font-weight:700;font-size:15px}
+  td.hl{color:var(--ink)}
+  td .bar{width:100%;max-width:90px}
+  /* key numbers first: spend, leads, CPL */
+  td.o1{order:1}td.o2{order:2}td.o3{order:3}td.o4{order:4}td.o5{order:5}td.o6{order:6}td.o7{order:7}td.o8{order:8}td.o9{order:9}
+  td.hl{background:var(--yellow-soft)!important;border-radius:8px;padding:4px 8px}
+  td,td+td{border-inline-start:0}
+  tbody tr:nth-child(even) td,tbody td.n:nth-child(even){background:none}
+}
+@media print{.mast{padding-bottom:30px}main{margin-top:16px}.periods{display:none}.card{box-shadow:none}}
+</style>
+</head>
+<body>
+<header class="mast">
+  <div class="wrap">
+    <div class="top">
+      <div class="client">
+        <div class="client-logo" id="cLogo" hidden></div>
+        <div class="title">
+          <div class="eyebrow">דשבורד ביצועי מדיה</div>
+          <h1 id="cName">—</h1>
+        </div>
+      </div>
+      <div class="agency">
+        <div class="t"><b>BRIGHT</b>נתונים עד <span id="asOf" class="num">—</span> · עודכן <span id="updated" class="num">—</span></div>
+        <img src="../assets/bright-logo.png" alt="BRIGHT">
+      </div>
+    </div>
+    <div class="periods" id="periods">
+      <button class="chip" data-p="last7">7 ימים אחרונים</button>
+      <button class="chip" data-p="last15">15 ימים אחרונים</button>
+      <button class="chip on" data-p="last30">30 ימים אחרונים</button>
+      <button class="chip" data-p="thisMonth">החודש (מצטבר)</button>
+      <button class="chip" data-p="lastMonth">חודש שעבר</button>
+      <button class="chip" data-p="lastQuarter">רבעון אחרון</button>
+      <div class="custom" id="custom">
+        <span>טווח ידני</span>
+        <input type="date" id="from" aria-label="מתאריך">
+        <span>–</span>
+        <input type="date" id="to" aria-label="עד תאריך">
+      </div>
+    </div>
+    <div class="range" id="rangeTxt"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="kpis" id="kpis"></section>
+
+  <section class="section">
+    <div class="sec-h"><div><h2>חלוקה לפי פלטפורמה</h2><p>חלק מההשקעה והתוצאות בתקופה הנבחרת · לחיצה על כרטיס פותחת את פירוט הפלטפורמה</p></div></div>
+    <div class="share" id="share"></div>
+  </section>
+
+
+  <section class="section">
+    <div class="sec-h"><div><h2>פירוט קמפיינים</h2><p>בחרו פלטפורמה · לחיצה על כותרת עמודה ממיינת</p></div></div>
+    <div class="tabs" id="tabs"></div>
+    <div id="platforms"></div>
+  </section>
+
+  <div class="foot">
+    <div class="defs">
+      <span id="defs"></span>
+      ההשוואה מתייחסת לתקופה הקודמת המקבילה.
+      סטטוס הקמפיין (באוויר / מושהה / הסתיים) מציג את המצב הנוכחי שלו, נכון לעדכון האחרון.
+    </div>
+    <div class="sig"><img src="../assets/bright-logo.png" alt=""><span>הופק ע"י <b>BRIGHT</b></span></div>
+  </div>
+</main>
+
+<script>
+let PL = ['meta','google','linkedin'];
+let K = {label:'לידים', unit:'ליד', cpa:'עלות לליד', rate:'אחוז המרה', value:false, type:'leads'};
+const PLAT = {
+  tiktok: {name:'TikTok', sub:'TikTok Ads', color:'#25F4EE', reach:true, clicks:'הקלקות',
+           icon:'<svg width="22" height="22" viewBox="0 0 24 24"><path fill="#141B34" d="M19.6 6.7a4.8 4.8 0 0 1-3.8-4.2V2h-3.4v13.4a2.9 2.9 0 1 1-2-2.7V9.2a6.3 6.3 0 1 0 5.4 6.2V8.6a8.2 8.2 0 0 0 3.8 1V6.7z"/></svg>'},
+  meta:   {name:'Meta', sub:'Facebook & Instagram', color:'#141B34', reach:true, clicks:'הקלקות (קישור)',
+           icon:'<svg width="22" height="22" viewBox="0 0 24 24"><path fill="#141B34" d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>'},
+  google: {name:'Google Ads', sub:'חיפוש · Performance Max · רשת המדיה', color:'#E9B824', reach:false, clicks:'הקלקות',
+           icon:'<svg width="22" height="22" viewBox="0 0 48 48"><path fill="#141B34" d="M43.6 20.1H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.9z"/></svg>'},
+  linkedin:{name:'LinkedIn', sub:'Sponsored Content · Lead Gen Forms', color:'#5B8DB8', reach:true, clicks:'הקלקות',
+           icon:'<svg width="22" height="22" viewBox="0 0 24 24"><path fill="#3F6E99" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>'}
+};
+const TYPE = {
+  'leadgen':['לידים · טופס','t-lead'], 'leadgen - remarketing':['רימרקטינג · טופס','t-lead'],
+  'website leads':['לידים · אתר','t-lead'], 'engagement':['מעורבות','t-brand'], 'engagment':['מעורבות','t-brand'],
+  'awarness':['מודעות','t-brand'], 'awareness':['מודעות','t-brand'], 'brand awareness':['מודעות למותג','t-brand'],
+  'search':['חיפוש','t-search'], 'pmax':['Performance Max','t-search'], 'gdn':['רשת המדיה (GDN)','t-search'], 'youtube':['YouTube','t-search']
+};
+
+const from = document.getElementById('from'), to = document.getElementById('to');
+let DATA, state = {key:'last30', from:null, to:null, tab:'meta'};
+try { const t = localStorage.getItem('bright-tab'); if (t) state.tab = t; } catch(e){}
+function setTab(p, scroll){ state.tab = p; try { localStorage.setItem('bright-tab', p); } catch(e){} render();
+  if (scroll) document.getElementById('tabs').scrollIntoView({behavior:'smooth', block:'start'}); }
+const sortBy = {meta:['s',-1], google:['s',-1], linkedin:['s',-1], tiktok:['s',-1]};
+const roas = t => t.s ? t.v / t.s : null;
+
+const nf = new Intl.NumberFormat('he-IL');
+const fmt = {
+  int: v => nf.format(Math.round(v)),
+  ils: v => '₪' + nf.format(Math.round(v)),
+  ils2: v => '₪' + new Intl.NumberFormat('he-IL',{maximumFractionDigits:v<100?1:0}).format(v),
+  pct: v => (v*100).toFixed(v<0.1?2:1) + '%',
+  date: s => { const [y,m,d] = s.split('-'); return `${+d}.${+m}.${y.slice(2)}`; }
+};
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const iso = d => d.toISOString().slice(0,10);
+const addDays = (s,n) => { const d = new Date(s+'T00:00:00Z'); d.setUTCDate(d.getUTCDate()+n); return iso(d); };
+const days = (a,b) => Math.round((new Date(b+'T00:00:00Z') - new Date(a+'T00:00:00Z'))/864e5) + 1;
+const or = (v,f,dash='—') => v==null ? dash : f(v);
+const ST = {live:'באוויר', paused:'מושהה', ended:'הסתיים'};
+const statusOf = (p,c) => (DATA.status && DATA.status[p] && DATA.status[p][c]) || null;
+
+function parseCampaign(raw){
+  const parts = (raw.includes('|') ? raw.split('|') : raw.split(' - ')).map(s=>s.trim()).filter(Boolean);
+  const rest = parts.filter(s => !(/^bright$/i.test(s) || /^[\d.,]+$/.test(s)));
+  const type = rest[0] || '';
+  const tinfo = TYPE[type.toLowerCase()];
+  const body = tinfo ? rest.slice(1) : rest;
+  const heb = body.filter(s => /[֐-׿]/.test(s));
+  const brand = body.some(s => /brand/i.test(s)) || /brand/i.test(type);
+  const extra = body.filter(s => !/[֐-׿]/.test(s) && !/^(generic|brand|video|thought leadership)$/i.test(s));
+  let name = heb.length ? heb.join(' · ') : (brand ? 'קמפיין מותג' : (extra.join(' · ') || raw));
+  let date = null;
+  const dm = name.match(/\(?\b(\d{1,2}\.\d{1,2}\.\d{2,4})\b\)?/);
+  if (dm){ date = dm[1]; name = name.replace(dm[0],'').replace(/\s{2,}/g,' ').trim(); }
+  const tags = [];
+  if (tinfo) tags.push(tinfo); else if (type && heb.length) tags.push([type,'']);
+  if (brand && heb.length) tags.push(['מותג','t-brand']);
+  if (!heb.length) extra.filter(s => s!==type).forEach(s => tags.push([s.replace(/\(remarketing\)/i,'· רימרקטינג'),'']));
+  if (/thought leadership/i.test(raw)) tags.push(['Thought Leadership','']);
+  if (/\|\s*video\s*$/i.test(raw)) tags.push(['וידאו','']);
+  if (/customer list/i.test(raw)) tags.push(['רשימת לקוחות','']);
+  if (date) tags.push(['מועד פתיחה ' + date,'t-date']);
+  return {name: name.replace(/\(\s*\)/g,'').trim(), tags};
+}
+
+const range = () => state.key === 'custom' ? [state.from, state.to] : DATA.presets[state.key];
+function presetKey(){
+  if (state.key !== 'custom') return state.key;
+  return Object.keys(DATA.presets).find(k => DATA.presets[k][0]===state.from && DATA.presets[k][1]===state.to) || null;
+}
+function reachFor(p, campaign){
+  const k = presetKey(); const R = k && DATA.reach[k] && DATA.reach[k][p];
+  if (!R) return null;
+  if (!campaign) return R.total ?? null;
+  return R.by[campaign] ?? null;
+}
+function derive(t){ t.ctr = t.i ? t.k/t.i : null; t.cpl = t.l ? t.s/t.l : null; t.cr = t.k ? t.l/t.k : null; return t; }
+function agg(rows){ const t = {i:0,k:0,l:0,s:0,v:0}; for (const r of rows){ t.i+=r.i; t.k+=r.k; t.l+=r.l; t.s+=r.s; t.v+=(r.v||0); } return derive(t); }
+const inRange = (a,b) => r => r.d >= a && r.d <= b;
+
+function delta(cur, prev, inverse){
+  if (cur == null || prev == null || !prev) return '';
+  const ch = (cur - prev) / prev; if (!isFinite(ch)) return '';
+  const cls = Math.abs(ch) < 0.005 ? 'flat' : ((inverse ? ch < 0 : ch > 0) ? 'up' : 'down');
+  return `<span class="delta ${cls}" title="לעומת התקופה הקודמת">${ch>0?'▲':ch<0?'▼':''} ${Math.abs(ch*100).toFixed(Math.abs(ch)<0.1?1:0)}%</span>`;
+}
+
+function render(){
+  const [a,b] = range();
+  const n = days(a,b);
+  let pa = addDays(a,-n), pb = addDays(a,-1);
+  if (state.key === 'lastMonth' || state.key === 'lastQuarter'){
+    const d = new Date(a+'T00:00:00Z'); d.setUTCMonth(d.getUTCMonth() - (state.key==='lastMonth'?1:3)); pa = iso(d);
+  }
+  const cur = DATA.rows.filter(inRange(a,b)), prev = DATA.rows.filter(inRange(pa,pb));
+  const T = agg(cur), P = agg(prev);
+  const by = Object.fromEntries(PL.map(p => [p, agg(cur.filter(r=>r.p===p))]));
+  const RP = PL.filter(p => PLAT[p].reach), RV = Object.fromEntries(RP.map(p => [p, reachFor(p)]));
+  const reach = RP.every(p => RV[p]==null) ? null : RP.reduce((t,p) => t + (RV[p]||0), 0);
+
+  document.getElementById('rangeTxt').innerHTML =
+    `תקופה: <b class="num">${fmt.date(a)} – ${fmt.date(b)}</b> (${n} ימים) · השוואה לתקופה <span class="num">${fmt.date(pa)} – ${fmt.date(pb)}</span>`;
+
+  const short = p => PLAT[p].name.split(' ')[0];
+  const split = (key, f) => { const tot = PL.reduce((s,p)=>s+by[p][key],0); if(!tot) return '';
+    return `<div class="split">${PL.map(p=>`<i style="width:${by[p][key]/tot*100}%;background:${PLAT[p].color}"></i>`).join('')}</div>
+            <div class="plist">${PL.map(p=>`<span><i style="background:${PLAT[p].color}"></i>${short(p)} <b class="num">${f(by[p][key])}</b></span>`).join('')}</div>`; };
+  const per = (key, f) => `<div class="plist" style="margin-top:12px">${PL.map(p=>`<span><i style="background:${PLAT[p].color}"></i>${short(p)} <b class="num">${or(by[p][key],f)}</b></span>`).join('')}</div>`;
+
+  const cards = [
+    {lbl:'השקעה כוללת', val:fmt.ils(T.s), d:delta(T.s,P.s,null), hero:1, extra:split('s',fmt.ils)},
+    {lbl:K.label, val:fmt.int(T.l), d:delta(T.l,P.l), hero:1, extra:split('l',fmt.int)},
+    {lbl:K.cpa, val:or(T.cpl,fmt.ils2), d:delta(T.cpl,P.cpl,true), hero:1, extra:per('cpl',fmt.ils2)},
+    K.value ? {lbl:'הכנסות', val:fmt.ils(T.v), d:delta(T.v,P.v), hero:1, sub:`ROAS ${or(roas(T), v => v.toFixed(2))}`, extra:split('v',fmt.ils)}
+            : {lbl:K.rate, val:or(K.type==='traffic' ? T.ctr : T.cr,fmt.pct), d:delta(T.cr,P.cr), hero:1, extra:per(K.type==='traffic'?'ctr':'cr',fmt.pct)},
+    {lbl:'חשיפות', val:fmt.int(T.i), d:delta(T.i,P.i), extra:split('i',fmt.int)},
+    {lbl:`Reach <small>(${RP.map(p=>PLAT[p].name.split(' ')[0]).join(' + ')})</small>`, val:or(reach,fmt.int),
+       sub:reach!=null?'':'זמין לתקופות המוגדרות מראש',
+       extra:reach!=null && RP.length>1 ? `<div class="plist" style="margin-top:12px">${RP.map(p=>`<span><i style="background:${PLAT[p].color}"></i>${PLAT[p].name.split(' ')[0]} <b class="num">${or(RV[p],fmt.int)}</b></span>`).join('')}</div>`:''},
+    {lbl:'הקלקות', val:fmt.int(T.k), d:delta(T.k,P.k), extra:split('k',fmt.int)},
+    {lbl:'אחוז הקלקה (CTR)', val:or(T.ctr,fmt.pct), d:delta(T.ctr,P.ctr), extra:per('ctr',fmt.pct)},
+  ];
+  document.getElementById('kpis').innerHTML = cards.map(c => `
+    <div class="card kpi ${c.hero?'hero':''}">
+      <div class="lbl">${c.lbl}</div>
+      <div class="val num">${c.val}</div>
+      <div class="sub">${c.d||''}${c.d?'<span>לעומת תקופה קודמת</span>':''}${c.sub?`<span>${c.sub}</span>`:''}</div>
+      ${c.extra||''}
+    </div>`).join('');
+
+  const shareEl = document.getElementById('share');
+  shareEl.innerHTML = PL.map(p => {
+    const o = by[p], sp = T.s ? o.s/T.s : 0, lp = T.l ? o.l/T.l : 0, c = PLAT[p].color;
+    return `<div class="card sh ${state.tab===p?'on':''}" data-tab="${p}" role="button" tabindex="0">
+      <div class="sh-h"><div class="ic ${p}">${PLAT[p].icon}</div><h4>${PLAT[p].name}</h4>
+        <span class="sh-share num" title="חלק מההשקעה">${Math.round(sp*100)}%</span></div>
+      <div class="sh-stats">
+        <div><span>השקעה</span><b class="num">${fmt.ils(o.s)}</b></div>
+        <div><span>${K.label}</span><b class="num">${fmt.int(o.l)}</b></div>
+        <div><span>${K.cpa}</span><b class="num">${or(o.cpl,fmt.ils2)}</b></div>
+      </div>
+      <div class="sh-bars">
+        <div class="sh-bar"><span>מההשקעה</span><div class="tr"><i style="width:${sp*100}%;background:${c}"></i></div><b class="num">${Math.round(sp*100)}%</b></div>
+        <div class="sh-bar"><span>מה${K.label}</span><div class="tr"><i style="width:${lp*100}%;background:var(--c-leads)"></i></div><b class="num">${Math.round(lp*100)}%</b></div>
+      </div></div>`;
+  }).join('');
+  shareEl.querySelectorAll('[data-tab]').forEach(el => { el.onclick = () => setTab(el.dataset.tab, true);
+    el.onkeydown = e => { if (e.key==='Enter' || e.key===' ') { e.preventDefault(); setTab(el.dataset.tab, true); } }; });
+
+  const tabsEl = document.getElementById('tabs');
+  tabsEl.innerHTML = PL.map(p => `<button class="tab ${state.tab===p?'on':''}" data-tab="${p}" role="tab" aria-selected="${state.tab===p}">
+      <span class="ic ${p}">${PLAT[p].icon}</span><span><b>${PLAT[p].name}</b><small><span class="num">${fmt.ils(by[p].s)}</span> · ${fmt.int(by[p].l)} ${K.label}</small></span></button>`).join('');
+  tabsEl.querySelectorAll('[data-tab]').forEach(el => el.onclick = () => setTab(el.dataset.tab));
+
+  renderPlatforms(cur, by);
+}
+
+function renderPlatforms(cur, totals){
+  const out = [];
+  for (const p of [state.tab]){
+    const byC = {};
+    for (const r of cur) if (r.p===p){ const o = (byC[r.c] ||= {c:r.c,i:0,k:0,l:0,s:0,v:0}); o.i+=r.i;o.k+=r.k;o.l+=r.l;o.s+=r.s;o.v+=(r.v||0); }
+    const list = Object.values(byC).map(derive);
+    if (PLAT[p].reach) list.forEach(o => o.r = reachFor(p, o.c));
+    const [key,dir] = sortBy[p];
+    list.sort((x,y) => key==='c' ? parseCampaign(x.c).name.localeCompare(parseCampaign(y.c).name,'he')*dir
+                                  : ((x[key]??-1) - (y[key]??-1)) * dir || y.s - x.s);
+    const T = totals[p], maxS = Math.max(1, ...list.map(o=>o.s)), R = PLAT[p].reach, tr_ = reachFor(p);
+    const cols = [['c','קמפיין',0],['s','השקעה',1],['i','חשיפות',1],...(R?[['r','Reach',1]]:[]),
+                  ['k',PLAT[p].clicks,1],['ctr','CTR',1],['l',K.label,1],['cpl',K.cpa,1],
+                  ...(K.value ? [['v','הכנסות',1],['roas','ROAS',1]] : [['cr','אחוז המרה',1]])];
+    list.forEach(o => o.roas = roas(o));
+    const th = cols.map(([k,l,n]) => `<th class="${n?'n':''} ${k==='l'||k==='cpl'?'hl':''} ${key===k?'sorted'+(dir>0?' asc':''):''}" data-plat="${p}" data-k="${k}">${l}</th>`).join('');
+    const rows = list.map(o => { const pc = parseCampaign(o.c), st = statusOf(p, o.c); return `<tr class="${st?'is-'+st:''}">
+        <td class="course" title="${esc(o.c)}">${st?`<span class="st ${st}">${ST[st]}</span>`:''}<b>${esc(pc.name)}</b><div class="tags">${pc.tags.map(([t,c])=>`<span class="tag ${c}">${esc(t)}</span>`).join('')}</div></td>
+        <td class="n o1" data-l="השקעה"><span class="num">${fmt.ils(o.s)}</span><div class="bar"><i style="width:${o.s/maxS*100}%;background:${PLAT[p].color}"></i></div></td>
+        <td class="n num o4" data-l="חשיפות">${fmt.int(o.i)}</td>
+        ${R?`<td class="n num o7" data-l="Reach">${or(o.r,fmt.int,'<span class="muted">—</span>')}</td>`:''}
+        <td class="n num o5" data-l="הקלקות">${fmt.int(o.k)}</td>
+        <td class="n num o6" data-l="CTR">${or(o.ctr,fmt.pct)}</td>
+        <td class="n num hl o2" data-l="${esc(K.label)}"><b>${fmt.int(o.l)}</b></td>
+        <td class="n num hl o3" data-l="${esc(K.cpa)}">${or(o.cpl,fmt.ils2,'<span class="muted">—</span>')}</td>
+        ${K.value ? `<td class="n num o8" data-l="הכנסות">${fmt.ils(o.v)}</td><td class="n num o9" data-l="ROAS">${or(o.roas, v => v.toFixed(2))}</td>`
+                  : `<td class="n num o8" data-l="אחוז המרה">${or(o.cr,fmt.pct)}</td>`}</tr>`; }).join('');
+    const mini = [['השקעה',fmt.ils(T.s)],[K.label,fmt.int(T.l)],[K.cpa,or(T.cpl,fmt.ils2)],K.value ? ['ROAS',or(roas(T), v => v.toFixed(2))] : ['אחוז המרה',or(T.cr,fmt.pct)],
+                  ['חשיפות',fmt.int(T.i)],['Reach',R?or(tr_,fmt.int):'לא זמין'],['הקלקות',fmt.int(T.k)],['CTR',or(T.ctr,fmt.pct)]];
+    out.push(`<div class="card plat">
+      <div class="plat-h">
+        <div class="plat-t"><div class="ic ${p}">${PLAT[p].icon}</div><div><h3>${PLAT[p].name}</h3><p>${PLAT[p].sub}</p></div></div>
+        <span class="plat-badge">${list.length} קמפיינים בתקופה · ${list.filter(o=>statusOf(p,o.c)==='live').length} באוויר כעת</span>
+      </div>
+      <div class="mini">${mini.map(([l,v])=>`<div><span>${l}</span><b class="num">${v}</b></div>`).join('')}</div>
+      ${list.length ? `<div class="tbl-wrap"><table><thead><tr>${th}</tr></thead><tbody>${rows}</tbody>
+        <tfoot><tr><td>סה"כ ${PLAT[p].name}</td><td class="n num">${fmt.ils(T.s)}</td><td class="n num">${fmt.int(T.i)}</td>
+        ${R?`<td class="n num">${or(tr_,fmt.int)}</td>`:''}
+        <td class="n num">${fmt.int(T.k)}</td><td class="n num">${or(T.ctr,fmt.pct)}</td><td class="n num hl">${fmt.int(T.l)}</td>
+        <td class="n num hl">${or(T.cpl,fmt.ils2)}</td>${K.value ? `<td class="n num">${fmt.ils(T.v)}</td><td class="n num">${or(roas(T), v => v.toFixed(2))}</td>` : `<td class="n num">${or(T.cr,fmt.pct)}</td>`}</tr></tfoot></table></div>`
+        : `<div class="empty">אין פעילות בפלטפורמה זו בתקופה הנבחרת</div>`}
+    </div>`);
+  }
+  const el = document.getElementById('platforms');
+  el.innerHTML = out.join('');
+  el.querySelectorAll('th[data-k]').forEach(th => th.onclick = () => {
+    const p = th.dataset.plat, k = th.dataset.k;
+    sortBy[p] = sortBy[p][0]===k ? [k, -sortBy[p][1]] : [k, k==='c'?1:-1];
+    render();
+  });
+}
+
+
+function setKey(k){
+  state.key = k;
+  document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.dataset.p===k));
+  document.getElementById('custom').classList.toggle('on', k==='custom');
+  if (k !== 'custom'){ const [a,b] = DATA.presets[k]; from.value = a; to.value = b; try { localStorage.setItem('bright-period', k); } catch(e){} }
+  render();
+}
+
+async function loadData(){
+  const local = ['localhost','127.0.0.1'].includes(location.hostname);
+  if (local && !location.search.includes('enc')){ try { const r = await fetch('client.dev.json?v='+Date.now()); if (r.ok) return await r.json(); } catch(e){} }
+  const k = new URLSearchParams(location.hash.slice(1)).get('k');
+  if (!k) throw new Error('nokey');
+  const enc = await (await fetch('data.enc.json?v=' + Date.now())).json();
+  const raw = Uint8Array.from(atob(k.replace(/-/g,'+').replace(/_/g,'/') + '==='.slice((k.length + 3) % 4)), c => c.charCodeAt(0));
+  const b = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  const key = await crypto.subtle.importKey('raw', raw, {name:'AES-GCM'}, false, ['decrypt']);
+  const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv:b(enc.iv)}, key, b(enc.ct));
+  return await new Response(new Blob([pt]).stream().pipeThrough(new DecompressionStream('gzip'))).json();
+}
+loadData().then(d => {
+  DATA = d;
+  const C = d.client || {};
+  PL = (C.platforms && C.platforms.length) ? C.platforms : PL;
+  K = C.kpi || K;
+  if (!PL.includes(state.tab)) state.tab = PL[0];
+  document.title = `${C.name} · דשבורד מדיה · BRIGHT`;
+  document.getElementById('cName').textContent = C.name || '';
+  if (C.logo){ const L = document.getElementById('cLogo'); L.hidden = false; L.innerHTML = `<img src="../assets/${esc(C.logo)}" alt="${esc(C.name)}">`; }
+  document.getElementById('defs').innerHTML = `<b>הגדרות:</b> ${esc(K.label)} = התוצאה שנמדדת בכל פלטפורמה. ${esc(K.cpa)} = השקעה ÷ ${esc(K.label)}.
+    CTR = הקלקות ÷ חשיפות. ${K.value ? 'הכנסות ו-ROAS לפי ערך הרכישות שמדווח בפלטפורמות. ' : ''}הוצאה בדולר מומרת לשקלים לפי שער יומי.
+    Reach (חשיפה ייחודית) מוצג לתקופות המוגדרות מראש.`;
+  document.documentElement.style.setProperty("--n", Math.min(PL.length, 3));
+  document.getElementById('asOf').textContent = fmt.date(d.asOf);
+  // Expected: data up to yesterday (Israel time). If older, say so instead of silently showing old numbers.
+  const ilToday = new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Jerusalem'}).format(new Date());
+  if (d.asOf < addDays(ilToday, -1)) document.getElementById('asOf').insertAdjacentHTML('afterend', ' <span style="color:#FBDD5C">· העדכון הבא בדרך</span>');
+  document.getElementById('updated').textContent = new Date(d.updated).toLocaleString('he-IL',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jerusalem'});
+  const first = d.rows.length ? d.rows[0].d : d.asOf;
+  for (const el of [from,to]){ el.min = first; el.max = d.asOf; }
+  document.querySelectorAll('.chip').forEach(c => c.onclick = () => setKey(c.dataset.p));
+  const onCustom = () => {
+    if (!from.value || !to.value) return;
+    if (from.value > to.value) [from.value, to.value] = [to.value, from.value];
+    state.from = from.value; state.to = to.value; setKey('custom');
+  };
+  from.onchange = onCustom; to.onchange = onCustom;
+  let saved = null; try { saved = localStorage.getItem('bright-period'); } catch(e){}
+  setKey(saved && d.presets[saved] ? saved : 'last30');
+}).catch(e => {
+  document.getElementById('kpis').innerHTML = `<div class="card empty" style="grid-column:1/-1">${e && e.message === 'nokey' ? 'הקישור חסר או לא שלם – בקשו מ-BRIGHT קישור חדש.' : 'לא ניתן לטעון את הנתונים כרגע. נסו לרענן את הדף.'}</div>`;
+});
+</script>
+</body>
+</html>

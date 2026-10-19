@@ -1,0 +1,107 @@
+{
+  "slug": "rotem-shani",
+  "name": "רותם שני",
+  "status": "active",
+  "owner": "TBD",
+  "accounts": {
+    "meta": [
+      {
+        "id": "1597181483874502",
+        "currency": "ILS"
+      }
+    ],
+    "google": [
+      {
+        "id": "271-019-9765",
+        "currency": "ILS"
+      }
+    ]
+  },
+  "kpi": {
+    "type": "leads",
+    "meta": "actions_onsite_conversion_lead_grouped",
+    "google": "conversions",
+    "linkedin": "externalwebsiteconversions",
+    "tiktok": "conversions"
+  },
+  "grouping": {
+    "mode": "project",
+    "projects": [
+      {
+        "key": "bs",
+        "name": "בית שמש · עדן",
+        "match": [
+          "בית שמש",
+          "פרויקט עדן"
+        ],
+        "sheet": [
+          "בית שמש"
+        ],
+        "tab": "לידים - בית שמש"
+      },
+      {
+        "key": "pt",
+        "name": "פתח תקווה · 2MORROW",
+        "match": [
+          "פתח תקווה"
+        ],
+        "sheet": [
+          "פ\"ת",
+          "פתח תקווה"
+        ],
+        "tab": "לידים - פתח תקווה"
+      },
+      {
+        "key": "gv",
+        "name": "גבעתיים · We G שדה בוקר",
+        "match": [
+          "גבעתיים"
+        ],
+        "sheet": [
+          "גבעתיים We G"
+        ],
+        "tab": "לידים - גבעתיים - שדה בוקר"
+      },
+      {
+        "key": "ra",
+        "name": "רעננה · We R",
+        "match": [
+          "רעננה"
+        ],
+        "sheet": [
+          "רעננה"
+        ],
+        "tab": "לידים - רעננה"
+      }
+    ],
+    "audiences": [
+      "קרנות השוטרים",
+      "משקיעים",
+      "משפחות",
+      "דירות גן",
+      "פנטהאוזים",
+      "מתעניינים בנדל\"ן",
+      "3 חדרים",
+      "6 חדרים",
+      "English",
+      "French"
+    ]
+  },
+  "history_start": "2026-01-01",
+  "detail_days": 120,
+  "key_version": 1,
+  "alerts": {
+    "no_leads_min_spend": 300,
+    "cpl_rise_ratio": 1.3,
+    "meta_frequency_max": 3.5,
+    "pace_low": 0.8,
+    "pace_high": 1.15
+  },
+  "leads": {
+    "source": "leadim_sheet",
+    "spreadsheet_id": "1UA8cBmP8SUEd0sqTvm9WCVAhLQLUH4xP1FJzYJVv1wk",
+    "history_tab": "דאטה היסטורי - כל הפרוייקטים",
+    "history_until": "2026-08-25",
+    "windsor_connector": "googlesheets"
+  }
+}
