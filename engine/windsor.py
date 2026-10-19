@@ -36,7 +36,10 @@ def get_raw(connector: str, account: str, fields: list, date_from, date_to) -> l
     qs = urllib.parse.urlencode({
         "api_key": KEY, "date_from": date_from.isoformat(), "date_to": date_to.isoformat(),
         "fields": ",".join(fields), "select_accounts": account})
-    body = http_json(API.format(connector=connector) + "?" + qs)
+    try:
+        body = http_json(API.format(connector=connector) + "?" + qs)
+    except urllib.error.HTTPError as e:
+        raise RuntimeError(f"Windsor {connector} {account} HTTP {e.code} fields={','.join(fields)}") from None
     return body.get("data", []) if isinstance(body, dict) else body
 
 

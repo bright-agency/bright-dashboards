@@ -99,7 +99,18 @@ def main():
     for name, (p, fields, period) in datasets().items():
         if not accounts(p):
             continue
-        raw[name] = get(p, fields, detail_from if period == "detail" else HISTORY_START, as_of)
+        d0 = detail_from if period == "detail" else HISTORY_START
+        try:
+            raw[name] = get(p, fields, d0, as_of)
+        except Exception as e:          # e.g. a value field Windsor rejects with this breakdown
+            slim = [f for f in fields if not f.startswith("action_values") and not f.endswith("_value")
+                    and f not in ("conversion_value", "total_complete_payment_rate")]
+            try:
+                raw[name] = get(p, slim, d0, as_of) if slim != fields else []
+                print(f"[{SLUG}] {name}: retried without value fields ({e})")
+            except Exception as e2:
+                raw[name] = []
+                print(f"[{SLUG}] WARNING {name} skipped: {e2}")
     if accounts("linkedin"):
         raw["li_demo"] = {}
         for key, (a, b) in client["presets"].items():
