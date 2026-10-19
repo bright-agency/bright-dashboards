@@ -45,6 +45,39 @@ def datasets() -> dict:
     }
 
 
+# Windsor rejects some action fields together with breakdowns (e.g. omni purchases x placement/age/device).
+SWAP = {"actions_omni_purchase": "actions_offsite_conversion_fb_pixel_purchase",
+        "action_values_omni_purchase": "action_values_offsite_conversion_fb_pixel_purchase"}
+BASE = {"date", "campaign", "impressions", "link_clicks", "clicks", "spend", "cost"}
+
+
+def fetch_with_fallback(get, name, p, fields, d0, d1):
+    """Full fields -> website-purchase fields (renamed back) -> no KPI fields. A failing breakdown never fails the client."""
+    swapped = [SWAP.get(f, f) for f in fields]
+    attempts = [(fields, {}), (swapped, {v: k for k, v in SWAP.items()}),
+                ([f for f in fields if f in BASE or not (f.startswith("actions_") or f.startswith("action_values")
+                                                        or f in ("conversions", "conversion_value", "oneclickleads",
+                                                                 "externalwebsiteconversions", "complete_payment",
+                                                                 "total_complete_payment_rate"))], {})]
+    last = None
+    for i, (flds, back) in enumerate(attempts):
+        if i and flds == attempts[i - 1][0]:
+            continue
+        try:
+            rows = get(p, flds, d0, d1)
+            for r in rows:
+                for new, old in back.items():
+                    if new in r:
+                        r[old] = r.pop(new)
+            if i:
+                print(f"[{SLUG}] {name}: fallback #{i} used ({last})")
+            return rows
+        except Exception as e:
+            last = e
+    print(f"[{SLUG}] WARNING {name} skipped: {last}")
+    return []
+
+
 def load_budgets(password: str) -> dict:
     path = CLIENT_DIR / "budgets.enc.json"
     if not path.exists() or not password:
@@ -100,17 +133,7 @@ def main():
         if not accounts(p):
             continue
         d0 = detail_from if period == "detail" else HISTORY_START
-        try:
-            raw[name] = get(p, fields, d0, as_of)
-        except Exception as e:          # e.g. a value field Windsor rejects with this breakdown
-            slim = [f for f in fields if not f.startswith("action_values") and not f.endswith("_value")
-                    and f not in ("conversion_value", "total_complete_payment_rate")]
-            try:
-                raw[name] = get(p, slim, d0, as_of) if slim != fields else []
-                print(f"[{SLUG}] {name}: retried without value fields ({e})")
-            except Exception as e2:
-                raw[name] = []
-                print(f"[{SLUG}] WARNING {name} skipped: {e2}")
+        raw[name] = fetch_with_fallback(get, name, p, fields, d0, as_of)
     if accounts("linkedin"):
         raw["li_demo"] = {}
         for key, (a, b) in client["presets"].items():
