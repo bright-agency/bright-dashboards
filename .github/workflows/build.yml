@@ -29,7 +29,7 @@ jobs:
     outputs:
       clients: ${{ steps.list.outputs.clients }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - id: list
         env:
           ONLY: ${{ github.event.inputs.only }}
@@ -61,7 +61,7 @@ jobs:
       DASHBOARD_MASTER_KEY: ${{ secrets.DASHBOARD_MASTER_KEY }}
       TEAM_WRITE_TOKEN: ${{ secrets.TEAM_WRITE_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -88,7 +88,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
