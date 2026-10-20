@@ -231,6 +231,17 @@ tfoot td{font-weight:800;background:#EEF0F4!important;border-top:2px solid #D9DC
 .cmp button{border:1px solid rgba(255,255,255,.2);background:transparent;color:#DDE0EA;padding:4px 12px;border-radius:999px;font:inherit;font-size:13px;cursor:pointer}
 .cmp button.on{background:#fff;color:var(--navy);border-color:#fff;font-weight:700}
 [hidden]{display:none!important}
+.pb{display:inline-flex;align-items:center;gap:5px;padding:3px 10px 3px 8px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap;line-height:1.2;vertical-align:middle;letter-spacing:.2px}
+.pb svg{width:12px;height:12px;flex:none}.pb svg path{fill:currentColor}
+.pb.meta{background:#E7F0FE;color:#0B57D0;box-shadow:inset 0 0 0 1px #B9D3FB}
+.pb.google{background:#FEF3D0;color:#8A5A00;box-shadow:inset 0 0 0 1px #F3D98A}
+.pb.linkedin{background:#E5EEF6;color:#0A66C2;box-shadow:inset 0 0 0 1px #BCD3E8}
+.pb.tiktok{background:#E3FAFA;color:#0E6E6D;box-shadow:inset 0 0 0 1px #A6EBEA}
+tr.pr-meta > td:first-child{box-shadow:inset -4px 0 0 #1877F2}
+tr.pr-google > td:first-child{box-shadow:inset -4px 0 0 #E9B824}
+tr.pr-linkedin > td:first-child{box-shadow:inset -4px 0 0 #0A66C2}
+tr.pr-tiktok > td:first-child{box-shadow:inset -4px 0 0 #25F4EE}
+.fullname{display:block;font-weight:700;line-height:1.35;margin-top:5px;word-break:break-word}
 </style>
 </head>
 <body>
@@ -306,6 +317,8 @@ const PLAT = {
   linkedin:{name:'LinkedIn', sub:'Sponsored Content · Lead Gen Forms', color:'#5B8DB8', reach:true, clicks:'הקלקות',
            icon:'<svg width="22" height="22" viewBox="0 0 24 24"><path fill="#3F6E99" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>'}
 };
+const pBadge = p => `<span class="pb ${p}">${PLAT[p].icon}${p==='google' ? 'Google Ads' : PLAT[p].name}</span>`;
+
 const TYPE = {
   'leadgen':['לידים · טופס','t-lead'], 'leadgen - remarketing':['רימרקטינג · טופס','t-lead'],
   'website leads':['לידים · אתר','t-lead'], 'engagement':['מעורבות','t-brand'], 'engagment':['מעורבות','t-brand'],
@@ -491,7 +504,7 @@ function renderPlatforms(cur, totals){
     list.forEach(o => o.roas = roas(o));
     const th = cols.map(([k,l,n]) => `<th class="${n?'n':''} ${k==='l'||k==='cpl'?'hl':''} ${key===k?'sorted'+(dir>0?' asc':''):''}" data-plat="${p}" data-k="${k}">${l}</th>`).join('');
     const rows = list.map(o => { const pc = parseCampaign(o.c), st = statusOf(p, o.c); return `<tr class="${st?'is-'+st:''}">
-        <td class="course" title="${esc(o.c)}">${st?`<span class="st ${st}">${ST[st]}</span>`:''}<b>${esc(pc.name)}</b><div class="tags">${pc.tags.map(([t,c])=>`<span class="tag ${c}">${esc(t)}</span>`).join('')}</div></td>
+        <td class="course" title="${esc(o.c)}">${st?`<span class="st ${st}">${ST[st]}</span>`:''}<b>${esc(pc.name)}</b><small class="fulln" style="display:block;color:var(--mute-2);font-size:12px;margin-top:3px;word-break:break-word">${pBadge(p)} ${esc(o.c)}</small><div class="tags">${pc.tags.map(([t,c])=>`<span class="tag ${c}">${esc(t)}</span>`).join('')}</div></td>
         <td class="n o1" data-l="השקעה"><span class="num">${fmt.ils(o.s)}</span><div class="bar"><i style="width:${o.s/maxS*100}%;background:${PLAT[p].color}"></i></div></td>
         <td class="n num o4" data-l="חשיפות">${fmt.int(o.i)}</td>
         ${R?`<td class="n num o7" data-l="Reach">${or(o.r,fmt.int,'<span class="muted">—</span>')}</td>`:''}

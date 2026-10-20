@@ -127,7 +127,7 @@ main{padding:22px 0 56px}
 .cb h5{margin:4px 0 10px;font-size:15px;font-weight:800}
 .mini-kpis{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .mini-kpis div{background:#fff;border:1px solid var(--hair);border-radius:12px;padding:8px 12px;min-width:120px}
-.mini-kpis > div > span:not(.picon){display:block;font-size:11.5px;color:var(--mute-2);font-weight:600}
+.mini-kpis > div > span:not(.picon):not(.pb){display:block;font-size:11.5px;color:var(--mute-2);font-weight:600}
 .mini-kpis b{font-size:16px;font-weight:800}
 
 /* tables */
@@ -207,6 +207,17 @@ a.cl{color:inherit;text-decoration:none}a.cl:hover{text-decoration:underline}a.c
 .cmp button{border:1px solid rgba(255,255,255,.2);background:transparent;color:#DDE0EA;padding:4px 12px;border-radius:999px;font:inherit;font-size:13px;cursor:pointer}
 .cmp button.on{background:#fff;color:var(--navy);border-color:#fff;font-weight:700}
 [hidden]{display:none!important}
+.pb{display:inline-flex;align-items:center;gap:5px;padding:3px 10px 3px 8px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap;line-height:1.2;vertical-align:middle;letter-spacing:.2px}
+.pb svg{width:12px;height:12px;flex:none}.pb svg path{fill:currentColor}
+.pb.meta{background:#E7F0FE;color:#0B57D0;box-shadow:inset 0 0 0 1px #B9D3FB}
+.pb.google{background:#FEF3D0;color:#8A5A00;box-shadow:inset 0 0 0 1px #F3D98A}
+.pb.linkedin{background:#E5EEF6;color:#0A66C2;box-shadow:inset 0 0 0 1px #BCD3E8}
+.pb.tiktok{background:#E3FAFA;color:#0E6E6D;box-shadow:inset 0 0 0 1px #A6EBEA}
+tr.pr-meta > td:first-child{box-shadow:inset -4px 0 0 #1877F2}
+tr.pr-google > td:first-child{box-shadow:inset -4px 0 0 #E9B824}
+tr.pr-linkedin > td:first-child{box-shadow:inset -4px 0 0 #0A66C2}
+tr.pr-tiktok > td:first-child{box-shadow:inset -4px 0 0 #25F4EE}
+.fullname{display:block;font-weight:700;line-height:1.35;margin-top:5px;word-break:break-word}
 </style>
 </head>
 <body>
@@ -345,6 +356,7 @@ function cleanName(raw){
 }
 const LINK_HE = {preview:'תצוגת מודעה', post:'פוסט', manage:{meta:'Ads Manager', google:'Google Ads', linkedin:'Campaign Manager'}};
 const ext = (u, t, cls='') => u ? `<a href="${esc(u)}" target="_blank" rel="noopener noreferrer" class="${cls}">${t} ↗</a>` : '';
+const pBadge = p => `<span class="pb ${p}">${PLAT[p].icon}${p==='google' ? 'Google Ads' : PLAT[p].name}</span>`;
 const pIcon = p => `<span class="picon ${p}" title="${PLAT[p].name}">${PLAT[p].icon}</span>`;
 
 /* ---------- data loading ---------- */
@@ -537,7 +549,7 @@ function renderAlerts(){
       ${c ? `<span class="pi">${PLAT[c.p].icon}</span>` : `<span class="pi">${a.type && a.type.startsWith('token') ? '🔑' : (MODE()==='project' ? (D.meta.single ? '📊' : '🏢') : '🎓')}</span>`}
       <div style="flex:1;min-width:0"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
         <span class="sev">${SEV[a.sev]}</span><h4>${esc(co ? co.name : a.type && a.type.startsWith('token') ? 'הגדרות מערכת' : '')}</h4></div>
-        <p>${esc(a.msg)}</p>${c ? `<div class="who">${PLAT[c.p].name} · ${esc(cleanName(c.name))}${c.type?' · '+(TYPE_HE[c.type]||c.type):''}</div>` : ''}</div></div>`;
+        <p>${esc(a.msg)}</p>${c ? `<div class="who">${pBadge(c.p)} ${esc(c.name)}${c.type?' · '+(TYPE_HE[c.type]||c.type):''}</div>` : ''}</div></div>`;
   }).join('') : `<div class="card empty" style="grid-column:1/-1">אין התראות בקטגוריה הזו 🎉</div>`;
 }
 
@@ -762,9 +774,9 @@ function courseBody(c, cp, ut){
   PL.forEach(p => { derive(byP[p]); vderive(byP[p]); });
   const PRJ = MODE()==='project';
   const mk = PL.filter(p => c.campaigns.some(ci => D.campaigns[ci].p===p)).map(p =>
-    PRJ ? `<div>${pIcon(p)}<span style="display:inline">${PLAT[p].name}</span><b class="num" style="display:block">${fmt.ils(byP[p].s)} · ${fmt.int(byP[p].v)} ${VL() ? 'תקינים' : K().label}</b>
+    PRJ ? `<div>${pBadge(p)}<b class="num" style="display:block">${fmt.ils(byP[p].s)} · ${fmt.int(byP[p].v)} ${VL() ? 'תקינים' : K().label}</b>
       <span>${VCPA()} ${or(byP[p].vcpl,fmt.ils2)}${VL() ? ` · בפלטפורמה ${fmt.int(byP[p].l)}` : ''}${K().value ? ` · ROAS ${or(roas(byP[p]), v => v.toFixed(2))}` : ''}</span></div>`
-    : `<div>${pIcon(p)}<span style="display:inline">${PLAT[p].name}</span><b class="num" style="display:block">${fmt.ils(byP[p].s)} · ${fmt.int(byP[p].l)} ${K().label}</b>
+    : `<div>${pBadge(p)}<b class="num" style="display:block">${fmt.ils(byP[p].s)} · ${fmt.int(byP[p].l)} ${K().label}</b>
       <span>CPL ${or(byP[p].cpl,fmt.ils2)} · CTR ${or(byP[p].ctr,fmt.pct)}</span></div>`).join('');
   let audTab = '';
   if (PRJ){
@@ -779,7 +791,7 @@ function courseBody(c, cp, ut){
   const ctab = `<table><thead><tr><th>קמפיין</th><th>סטטוס</th><th>${PRJ ? 'קהל' : 'תקציב (שם)'}</th><th>יומי מוגדר</th><th>השקעה</th><th>חשיפות</th><th>הקלקות</th><th>CTR</th>
       ${PRJ ? `<th class="hl">${VLAB()}</th><th class="hl">${VCPA()}</th><th class="vl">בפלטפורמה</th>` : `<th class="hl">${K().label}</th><th class="hl">${K().cpa}</th><th>${K().rate}</th>`}<th class="val">הכנסות</th><th class="val">ROAS</th></tr></thead><tbody>${camps.filter(ci => !PRJ || cp[ci].s || cp[ci].v || cp[ci].i).map(ci => {
       const m = D.campaigns[ci], t = cp[ci];
-      return `<tr><td class="nm">${pIcon(m.p)}<b style="display:inline">${m.url ? `<a class="cl" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer" title="פתיחה ב-${LINK_HE.manage[m.p]}">${esc(cleanName(m.name))}</a>` : esc(cleanName(m.name))}</b><br><small>${m.type?`<span class="tag">${TYPE_HE[m.type]||m.type}</span>`:''}${m.end?`סיום ${fmt.date(m.end)}`:''}</small></td>
+      return `<tr class="pr-${m.p}"><td class="nm" style="min-width:320px">${pBadge(m.p)}<b class="fullname">${m.url ? `<a class="cl" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer" title="פתיחה ב-${LINK_HE.manage[m.p]}">${esc(m.name)}</a>` : esc(m.name)}</b><small>${m.type?`<span class="tag">${TYPE_HE[m.type]||m.type}</span>`:''}${m.end?`סיום ${fmt.date(m.end)}`:''}</small></td>
         <td>${m.status?`<span class="st ${m.status}">${ST[m.status]}</span>`:'—'}</td>
         <td class="${PRJ ? '' : 'num'}">${PRJ ? esc(m.aud || '—') : or(m.budget,fmt.ils)}</td><td class="num">${or(m.daily,fmt.ils)}</td>
         <td class="num">${fmt.ils(t.s)}</td><td class="num">${fmt.int(t.i)}</td><td class="num">${fmt.int(t.k)}</td><td class="num">${or(t.ctr,fmt.pct)}</td>
@@ -796,8 +808,8 @@ function courseBody(c, cp, ut){
       let img = u.p==='meta' ? (u.thumb ? `<img src="${esc(u.thumb)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ph',textContent:'—'}))">` : `<span class="ph">—</span>`) : '';
       if (img && L.preview) img = `<a href="${esc(L.preview)}" target="_blank" rel="noopener noreferrer" title="תצוגת מודעה">${img}</a>`;
       const links = `<span class="lk">${ext(L.preview, LINK_HE.preview, 'pv')}${ext(L.post, LINK_HE.post, 'pv')}${ext(L.manage, LINK_HE.manage[u.p])}</span>`;
-      return `<tr><td><div class="ad">${img}<div class="nm"><b>${esc(title)}</b><small>${u.ad ? (u.p==='linkedin' ? 'קריאייטיב' : 'סט: '+esc(u.set)) : 'קבוצת מודעות'}${u.setStatus?` · ${esc(String(u.setStatus).toLowerCase())}`:''}</small>${links}</div></div></td>
-        <td>${pIcon(u.p)}</td><td class="num">${fmt.ils(t.s)}</td><td class="num">${fmt.int(t.i)}</td><td class="num">${fmt.int(t.k)}</td><td class="num">${or(t.ctr,fmt.pct)}</td>
+      return `<tr class="pr-${u.p}"><td><div class="ad">${img}<div class="nm"><b>${esc(title)}</b><small>${u.ad ? (u.p==='linkedin' ? 'קריאייטיב' : 'סט: '+esc(u.set)) : 'קבוצת מודעות'}${u.setStatus?` · ${esc(String(u.setStatus).toLowerCase())}`:''}</small>${links}</div></div></td>
+        <td>${pBadge(u.p)}</td><td class="num">${fmt.ils(t.s)}</td><td class="num">${fmt.int(t.i)}</td><td class="num">${fmt.int(t.k)}</td><td class="num">${or(t.ctr,fmt.pct)}</td>
         <td class="num hl"><b>${fmt.int(t.l)}</b></td><td class="num hl">${or(t.cpl,fmt.ils2)}</td><td class="num">${or(t.cr,fmt.pct)}</td></tr>`; }).join('')}</tbody></table>` : '';
   return `<div class="mini-kpis">${mk}</div>
     ${audTab}<h5>קמפיינים בתקופה</h5><div class="tbl-wrap">${ctab}</div>
