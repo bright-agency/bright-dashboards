@@ -37,7 +37,8 @@
         "sheet": [
           "בית שמש"
         ],
-        "tab": "לידים - בית שמש"
+        "tab": "לידים - בית שמש",
+        "gid": "1641662722"
       },
       {
         "key": "pt",
@@ -49,7 +50,8 @@
           "פ\"ת",
           "פתח תקווה"
         ],
-        "tab": "לידים - פתח תקווה"
+        "tab": "לידים - פתח תקווה",
+        "gid": null
       },
       {
         "key": "gv",
@@ -60,7 +62,8 @@
         "sheet": [
           "גבעתיים We G"
         ],
-        "tab": "לידים - גבעתיים - שדה בוקר"
+        "tab": "לידים - גבעתיים - שדה בוקר",
+        "gid": null
       },
       {
         "key": "ra",
@@ -71,7 +74,8 @@
         "sheet": [
           "רעננה"
         ],
-        "tab": "לידים - רעננה"
+        "tab": "לידים - רעננה",
+        "gid": null
       }
     ],
     "audiences": [
@@ -102,6 +106,7 @@
     "spreadsheet_id": "1UA8cBmP8SUEd0sqTvm9WCVAhLQLUH4xP1FJzYJVv1wk",
     "history_tab": "דאטה היסטורי - כל הפרוייקטים",
     "history_until": "2026-08-25",
-    "windsor_connector": "googlesheets"
+    "windsor_connector": "googlesheets",
+    "history_gid": null
   }
 }

@@ -154,10 +154,10 @@ def main():
             a, b = date.fromisoformat(a), date.fromisoformat(b)
             raw["li_demo"][key] = {"func": get("linkedin", ["member_job_function"] + L(), a, b),
                                    "senior": get("linkedin", ["member_seniority"] + L(), a, b)}
-    leads_source = None
+    leads_source, leads_missing = None, []
     if CONFIG.get("leads", {}).get("source"):
         import leads_sheet
-        raw["leads"], leads_source = leads_sheet.load(get)
+        raw["leads"], leads_source, leads_missing = leads_sheet.load(get)
         # sheet not reachable: keep sheet-only mode (no platform leads as a stand-in), the page shows a warning
     fx = usd_ils(HISTORY_START, as_of)
     now = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat(timespec="minutes")
@@ -167,6 +167,7 @@ def main():
     payload["meta"]["write"] = write_config()
     payload["meta"]["leadsSource"] = leads_source
     payload["meta"]["leadsMissing"] = leads_source == "none"
+    payload["meta"]["leadsTabsMissing"] = leads_missing
     if payload["meta"].get("validLeads"):
         sheet_leads_to_client(client, payload)
     print(f"[{SLUG}] team payload: campaigns={len(payload['campaigns'])} units={len(payload['units'])} "

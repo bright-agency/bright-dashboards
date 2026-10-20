@@ -415,7 +415,9 @@ async function start(d){
   if (lag > 0) $('asOf').insertAdjacentHTML('afterend', ` <span style="color:#FBDD5C;font-weight:700">⚠ הנתונים בפיגור של ${lag} ${lag===1?'יום':'ימים'} – העדכון האוטומטי לא רץ</span>`);
   $('updated').textContent = new Date(d.meta.generated).toLocaleString('he-IL',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jerusalem'});
   $('detailFrom').textContent = fmt.date(d.meta.detailFrom);
-  if (VL() && d.meta.leadsSource !== 'windsor')
+  if (VL() && d.meta.leadsSource === 'partial')
+    $('asOf').insertAdjacentHTML('afterend', ` <span style="color:#FBDD5C;font-weight:700">⚠ לשוניות בגיליון שעוד לא מחוברות: ${esc((d.meta.leadsTabsMissing||[]).join(', '))}</span>`);
+  else if (VL() && d.meta.leadsSource !== 'windsor')
     $('asOf').insertAdjacentHTML('afterend', ` <span style="color:#FBDD5C;font-weight:700">⚠ ${d.meta.leadsSource === 'local' ? 'לידים מהגיליון – תצוגה מקומית' : 'הגיליון של LEAD.IM לא מחובר – הלידים לא מתעדכנים (לא מוצגים לידים מהפלטפורמות)'}</span>`);
   $('tokInfo').textContent = d.meta.write ? '' : 'שמירת תקציבים משותפת: לא הוגדרה.';
   for (const el of [from,to]){ el.min = DAY.reduce((a,b)=>a<b?a:b); el.max = d.meta.asOf; }

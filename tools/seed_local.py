@@ -48,7 +48,7 @@ now = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat(timespec="minutes")
 client = write_data(as_of, rows, {}, now, status)
 if CONFIG.get("leads", {}).get("source"):
     import leads_sheet
-    raw["leads"], src = leads_sheet.load()
+    raw["leads"], src, _ = leads_sheet.load()
 pw = os.environ.get("TEAM_PASSWORD", "")
 engine = __import__("group_course" if CONFIG.get("grouping", {}).get("mode") == "course" else "group_project")
 payload = engine.build(client, raw, lambda d: 1.0, now, fetch_team.load_budgets(pw))
