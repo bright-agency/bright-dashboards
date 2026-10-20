@@ -19,8 +19,11 @@ FIELDS = {"#": "#", "תאריך": "תאריך", "קמפיין": "קמפיין", 
 def tabs() -> list:
     """[(tab name, gid, project_key or None for the history tab)]"""
     L = CONFIG["leads"]
-    return [(L["history_tab"], L.get("history_gid"), None)] + \
-           [(p["tab"], p.get("gid"), p["key"]) for p in CONFIG["grouping"]["projects"]]
+    out = [(L["history_tab"], L.get("history_gid"), None)]
+    for p in CONFIG["grouping"]["projects"]:          # gid may be a list: several tabs feed one project
+        gids = p["gid"] if isinstance(p.get("gid"), list) else [p.get("gid")]
+        out += [(p["tab"] + (f" #{i + 1}" if i else ""), g, p["key"]) for i, g in enumerate(gids)]
+    return out
 
 
 def _records(get_raw, account, start, end) -> list:
