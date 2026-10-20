@@ -47,6 +47,17 @@ button{font:inherit}
 .upd{color:#B9BCCB;font-size:13px;text-align:left}
 .upd b{color:#fff}
 .lock{background:transparent;border:1px solid rgba(255,255,255,.25);color:#DDE0EA;border-radius:999px;padding:4px 12px;font-size:12.5px;cursor:pointer;margin-top:6px}
+.prjbar{margin-top:20px}
+.prjbar .lbl{font-size:13px;color:#B9BCCB;margin-bottom:8px;font-weight:600}
+.prjbar .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.prjbar button{text-align:right;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.04);color:#fff;border-radius:14px;padding:12px 14px;cursor:pointer;font:inherit;transition:.15s}
+.prjbar button:hover{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08)}
+.prjbar button b{display:block;font-size:15px;font-weight:700;line-height:1.3}
+.prjbar button small{display:block;font-size:12px;color:#B9BCCB;margin-top:4px}
+.prjbar button.on{background:var(--yellow);border-color:var(--yellow);color:var(--navy)}
+.prjbar button.on small{color:var(--navy);opacity:.75}
+.prjbar button.brand{border-style:dashed}
+.prj-on .periods{margin-top:16px}
 .periods{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .chip{border:1px solid rgba(255,255,255,.2);background:transparent;color:#DDE0EA;padding:7px 16px;border-radius:999px;font-size:14px;font-weight:500;cursor:pointer}
 .chip:hover{border-color:rgba(255,255,255,.5);color:#fff}
@@ -222,6 +233,7 @@ a.cl{color:inherit;text-decoration:none}a.cl:hover{text-decoration:underline}a.c
       <div class="upd">נתונים עד <b id="asOf" class="num">—</b> · עודכן <span id="updated" class="num">—</span><br>
         <button class="lock" id="lock">נעילה</button></div>
     </div>
+    <div class="prjbar" id="prjBar" hidden></div>
     <div class="periods" id="periods">
       <button class="chip" data-p="last7">7 ימים</button>
       <button class="chip" data-p="last15">15 ימים</button>
@@ -299,7 +311,10 @@ const he = s => DIM_HE[s] || s;
 const $ = id => document.getElementById(id);
 const from = $('from'), to = $('to');
 let PW = null, BUD = {}, BUD_SHA = null, LIFE = null;
-let D, DAY, state = {key:'last30', from:null, to:null, alert:'all', courseFilter:'active', bdPlat:'meta', bdCourse:'live', open:new Set(), more:new Set()};
+let D, DAY, state = {key:'last30', from:null, to:null, alert:'all', courseFilter:'active', bdPlat:'meta', bdCourse:'live', open:new Set(), more:new Set(), prj:null};
+const PRJBAR = () => MODE()==='project' && !D.meta.single && D.courses.length > 1;
+const okPrj = ci => state.prj == null || !PRJBAR() || D.campaigns[ci].course === state.prj;
+const PRJ_LS = () => 'bright-prj-' + (D.meta.client || '');
 
 const nf = new Intl.NumberFormat('he-IL');
 const fmt = {
@@ -397,6 +412,9 @@ async function start(d){
   const onCustom = () => { if (!from.value || !to.value) return; if (from.value > to.value) [from.value,to.value] = [to.value,from.value];
     state.from = from.value; state.to = to.value; setKey('custom'); };
   from.onchange = onCustom; to.onchange = onCustom;
+  if (PRJBAR()){ let v = null; try { v = localStorage.getItem(PRJ_LS()); } catch(e){}
+    state.prj = v != null && v !== 'all' && D.courses[+v] ? +v : null;
+    if (state.prj != null) state.open.add(D.courses[state.prj].key); }
   precompute();
   await loadBudgets();
   setKey('last30');
@@ -449,12 +467,14 @@ function render(){
   for (const [d,ci,v] of (D.leadRows || [])){ if (inP(d)) cp[ci].v += v; else if (inPrev(d)) cprev[ci].v += v; }
   for (const [d,ci,v] of (D.valRows || [])){ if (inP(d)) cp[ci].r += v; else if (inPrev(d)) cprev[ci].r += v; }
   cp.forEach(derive); cp.forEach(vderive);
+  renderPrjBar(cp);
 
   // KPIs
   const T = zero(), P = zero();
-  cp.forEach(t => { add(T,t.i,t.k,t.l,t.s); T.v += t.v; T.r += t.r; }); cprev.forEach(t => { add(P,t.i,t.k,t.l,t.s); P.v += t.v; P.r += t.r; });
+  cp.forEach((t,ci) => { if (okPrj(ci)) { add(T,t.i,t.k,t.l,t.s); T.v += t.v; T.r += t.r; } });
+  cprev.forEach((t,ci) => { if (okPrj(ci)) { add(P,t.i,t.k,t.l,t.s); P.v += t.v; P.r += t.r; } });
   derive(T); derive(P); vderive(T); vderive(P);
-  const liveCamps = D.campaigns.filter(c => c.status==='live').length;
+  const liveCamps = D.campaigns.filter((c,ci) => c.status==='live' && okPrj(ci)).length;
   const activeCourses = D.courses.filter(c => !c.brand && c.phase !== 'ended').length;
   const dl = (c,p,inv) => { if (c==null||!p) return ''; const ch=(c-p)/p; const good = inv ? ch<0 : ch>0;
     return `<small class="${Math.abs(ch)<.005?'':good?'good':'bad'}">${ch>0?'▲':'▼'} ${Math.abs(ch*100).toFixed(0)}% ${CMP.mode==='same'?'מול החודש הקודם':'מול תקופה קודמת'}</small>`; };
@@ -464,8 +484,9 @@ function render(){
       : K().value ? ['הכנסות', fmt.ils(T.r), `<small>ROAS ${or(roas(T), v => v.toFixed(2))}</small>`]
       : ['CTR', or(T.ctr,fmt.pct), dl(T.ctr,P.ctr)],
     D.meta.single ? ['קמפיינים באוויר', fmt.int(liveCamps), `<small>${D.campaigns.filter(c=>!c.pseudo).length} קמפיינים בסה"כ</small>`]
+      : state.prj != null && PRJBAR() ? ['קמפיינים באוויר', fmt.int(liveCamps), `<small>${D.courses[state.prj].campaigns.filter(ci => !D.campaigns[ci].pseudo).length} קמפיינים בפרויקט</small>`]
       : ['פרויקטים פעילים', fmt.int(D.courses.filter(c => !c.brand && c.live).length), `<small>${liveCamps} קמפיינים באוויר</small>`],
-    ['התראות', fmt.int(allAlerts().length), `<small>${allAlerts().filter(x=>x.sev==='high').length} דחופות</small>`]
+    ['התראות', fmt.int(prjAlerts().length), `<small>${prjAlerts().filter(x=>x.sev==='high').length} דחופות</small>`]
   ] : null;
   $('kpis').innerHTML = (KP || [
     ['השקעה', fmt.ils(T.s), dl(T.s,P.s,null)], [K().label, fmt.int(T.l), dl(T.l,P.l)], [K().cpa, or(T.cpl,fmt.ils2), dl(T.cpl,P.cpl,true)],
@@ -478,8 +499,33 @@ function render(){
   renderBreakdowns(inP);
 }
 
+function renderPrjBar(cp){
+  const bar = $('prjBar');
+  if (!PRJBAR()){ bar.hidden = true; return; }
+  bar.hidden = false; document.body.classList.add('prj-on');
+  const tot = D.courses.map(() => zero());
+  cp.forEach((t,ci) => { const g = tot[D.campaigns[ci].course]; if (g){ add(g,t.i,t.k,t.l,t.s); g.v += t.v; } });
+  const all = zero(); tot.forEach(t => { add(all,t.i,t.k,t.l,t.s); all.v += t.v; });
+  const lab = VL() ? 'תקינים' : K().label;
+  const tile = (k, name, t, extra='') => `<button type="button" data-k="${k}" class="${String(state.prj ?? 'all')===k?'on':''} ${extra}">
+    <b>${esc(name)}</b><small class="num">${fmt.ils(t.s)} · ${fmt.int(VL() || MODE()==='project' ? t.v : t.l)} ${lab}</small></button>`;
+  bar.innerHTML = `<div class="lbl">בחירת פרויקט</div><div class="tiles">${tile('all', 'כל הפרויקטים', all)}${
+    D.courses.map((c,i) => tile(String(i), c.name, tot[i], c.brand ? 'brand' : '')).join('')}</div>`;
+  bar.querySelectorAll('button').forEach(b => b.onclick = () => {
+    state.prj = b.dataset.k === 'all' ? null : +b.dataset.k;
+    try { localStorage.setItem(PRJ_LS(), b.dataset.k); } catch(e){}
+    if (state.prj != null) state.open.add(D.courses[state.prj].key);
+    state.bdCourse = state.prj != null ? String(state.prj) : 'live';
+    render();
+  });
+}
+function prjAlerts(){
+  if (state.prj == null || !PRJBAR()) return allAlerts();
+  return allAlerts().filter(a => a.course === state.prj || (a.campaign != null && D.campaigns[a.campaign].course === state.prj)
+    || (a.course == null && a.campaign == null));
+}
 function renderAlerts(){
-  const AL = allAlerts();
+  const AL = prjAlerts();
   const counts = {all:AL.length}; AL.forEach(a => counts[a.sev] = (counts[a.sev]||0)+1);
   $('alertSeg').innerHTML = [['all','הכל'],['high','דחוף'],['med','לבדיקה'],['info','לידיעה']]
     .map(([k,l]) => `<button class="${state.alert===k?'on':''}" data-k="${k}">${l}<span class="c">${counts[k]||0}</span></button>`).join('');
@@ -666,7 +712,8 @@ function renderCourses(cp, inP){
     .map(([k,l]) => `<button class="${f===k?'on':''}" data-k="${k}">${l}<span class="c">${counts[k]}</span></button>`).join('');
   $('courseSeg').querySelectorAll('button').forEach(b => b.onclick = () => { state.courseFilter = b.dataset.k; render(); });
 
-  const list = D.courses.map((c,i) => ({...c, ...budgetInfo(c), i})).filter(c => f==='all' || (f==='active' ? isActive(c) : !isActive(c)));
+  const list = D.courses.map((c,i) => ({...c, ...budgetInfo(c), i})).filter(c => f==='all' || (f==='active' ? isActive(c) : !isActive(c)))
+    .filter(c => state.prj == null || !PRJBAR() || c.i === state.prj);
   // unit totals per period
   const ut = D.units.map(zero);
   for (const [d,ui,i,k,l,s] of D.unitRows) if (inP(d)) add(ut[ui],i,k,l,s);
@@ -766,7 +813,9 @@ function renderBreakdowns(inP){
   $('bdPlat').querySelectorAll('button').forEach(b => b.onclick = () => { state.bdPlat = b.dataset.k; render(); });
   const p = state.bdPlat;
   const sel = $('bdCourse');
-  const opts = [['all','כל הקורסים'],['live','קורסים פעילים בלבד'], ...D.courses.map((c,i) => [String(i), c.name + (c.start?` (${fmt.date(c.start)})`:'')])];
+  if (PRJBAR() && state.prj != null) state.bdCourse = String(state.prj);
+  sel.style.display = PRJBAR() && state.prj != null ? 'none' : '';
+  const opts = [['all', MODE()==='project' ? 'כל הפרויקטים' : 'כל הקורסים'],['live', MODE()==='project' ? 'פרויקטים פעילים בלבד' : 'קורסים פעילים בלבד'], ...D.courses.map((c,i) => [String(i), c.name + (c.start?` (${fmt.date(c.start)})`:'')])];
   sel.innerHTML = opts.map(([v,l]) => `<option value="${v}" ${state.bdCourse===v?'selected':''}>${esc(l)}</option>`).join('');
   sel.disabled = p==='linkedin';
   sel.onchange = () => { state.bdCourse = sel.value; render(); };
