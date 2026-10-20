@@ -38,7 +38,121 @@
     "tiktok": "conversions"
   },
   "grouping": {
-    "mode": "project"
+    "mode": "project",
+    "label": {
+      "p": "קורסים",
+      "s": "קורס"
+    },
+    "projects": [
+      {
+        "key": "ai-arch",
+        "name": "AI לאדריכלות ועיצוב",
+        "match": [
+          "AI for Arch"
+        ]
+      },
+      {
+        "key": "kitchen",
+        "name": "עיצוב מטבחים",
+        "match": [
+          "Kitchen design"
+        ]
+      },
+      {
+        "key": "home",
+        "name": "הום סטיילינג",
+        "match": [
+          "Home styling"
+        ]
+      },
+      {
+        "key": "arch",
+        "name": "הנדסאי אדריכלות ועיצוב פנים",
+        "match": [
+          "Architecture",
+          "Arch Design"
+        ]
+      },
+      {
+        "key": "interior",
+        "name": "עיצוב פנים",
+        "match": [
+          "InteriorDesign",
+          "interior-design",
+          "Interior design"
+        ]
+      },
+      {
+        "key": "building",
+        "name": "הנדסאי בניין",
+        "match": [
+          "Building"
+        ]
+      },
+      {
+        "key": "landscape",
+        "name": "הנדסאי אדריכלות נוף",
+        "match": [
+          "Landscape"
+        ]
+      },
+      {
+        "key": "electronics",
+        "name": "הנדסאי אלקטרוניקה",
+        "match": [
+          "Electronica",
+          "Electronics"
+        ]
+      },
+      {
+        "key": "software",
+        "name": "הנדסאי תוכנה AI",
+        "match": [
+          "Program Engineer"
+        ]
+      },
+      {
+        "key": "safety",
+        "name": "הנדסאי בטיחות",
+        "match": [
+          "Safety engineer"
+        ]
+      },
+      {
+        "key": "visual",
+        "name": "תקשורת חזותית ומדיה",
+        "match": [
+          "visual"
+        ]
+      },
+      {
+        "key": "graphic",
+        "name": "עיצוב גרפי",
+        "match": [
+          "GraphicDesign",
+          "Graphic-Design"
+        ]
+      },
+      {
+        "key": "uxui",
+        "name": "עיצוב UX/UI",
+        "match": [
+          "ux/ui",
+          "Ux-Ui"
+        ]
+      },
+      {
+        "key": "mechina",
+        "name": "מכינה",
+        "match": [
+          "Mechina"
+        ]
+      }
+    ],
+    "audiences": [
+      "Extended",
+      "North"
+    ]
   },
   "history_start": "2026-01-01",
   "detail_days": 120,

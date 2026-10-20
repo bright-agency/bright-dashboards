@@ -56,7 +56,7 @@ def platform_for(source: str) -> str:
 
 def is_valid(rec: dict) -> bool:
     st = str(rec.get("סטטוס") or "").strip().lower()
-    if st and st not in VALID_STATUS:
+    if st not in VALID_STATUS:                    # only new leads; duplicate / invalid / empty status are out
         return False
     for flag in ("סטטוס: כפול", "סטטוס: פרטים שגויים", "סטטוס: רשימה שחורה"):
         if str(rec.get(flag) or "").strip().lower() in YES:

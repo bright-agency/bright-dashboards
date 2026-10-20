@@ -96,6 +96,20 @@ def write_config():
     return {"repo": repo, "path": f"clients/{SLUG}/budgets.enc.json", "branch": "main", "token": tok}
 
 
+def sheet_leads_to_client(client: dict, payload: dict):
+    """Sheet-only clients (CRM leads): the client page shows the same leads as the team page - sheet leads per
+    campaign and day; platform lead counts are dropped. Leads without a campaign stay as their own row."""
+    from collections import Counter
+    days, camps, m = payload["days"], payload["campaigns"], Counter()
+    for d, ci, n in payload.get("leadRows", []):
+        m[(days[d], camps[ci]["p"], camps[ci]["name"])] += n
+    for r in client["rows"]:
+        r["l"] = m.pop((r["d"], r["p"], r["c"]), 0)
+    for (d, p, c), n in sorted(m.items()):
+        client["rows"].append({"d": d, "p": p, "c": c, "i": 0, "k": 0, "l": n, "s": 0, "a": ""})
+    client["leadsSource"] = "sheet"
+
+
 def summary(payload: dict, client: dict) -> dict:
     """Numbers for the agency home page: last 7/30 days, alerts, update time."""
     as_of = client["asOf"]
@@ -144,8 +158,7 @@ def main():
     if CONFIG.get("leads", {}).get("source"):
         import leads_sheet
         raw["leads"], leads_source = leads_sheet.load(get)
-        if leads_source == "none":          # CRM not connected yet -> platform results, with a warning in the page
-            raw.pop("leads")
+        # sheet not reachable: keep sheet-only mode (no platform leads as a stand-in), the page shows a warning
     fx = usd_ils(HISTORY_START, as_of)
     now = datetime.now(ZoneInfo("Asia/Jerusalem")).isoformat(timespec="minutes")
     budgets = load_budgets(pw)
@@ -154,6 +167,8 @@ def main():
     payload["meta"]["write"] = write_config()
     payload["meta"]["leadsSource"] = leads_source
     payload["meta"]["leadsMissing"] = leads_source == "none"
+    if payload["meta"].get("validLeads"):
+        sheet_leads_to_client(client, payload)
     print(f"[{SLUG}] team payload: campaigns={len(payload['campaigns'])} units={len(payload['units'])} "
           f"alerts={len(payload['alerts'])} budgets={len(budgets)} leads={leads_source}")
 

@@ -24,9 +24,9 @@ PROJECTS = G.get("projects", [])
 
 
 def group_of(name: str):
-    s = clean(name)
+    s = clean(name).lower()
     for p in PROJECTS:
-        if any(m in s for m in p["match"]):
+        if any(m.lower() in s for m in p["match"]):
             return p["key"]
     return BRAND_KEY if PROJECTS else ALL_KEY
 
@@ -354,7 +354,7 @@ def build(client: dict, raw: dict, fx, generated: str, budgets: dict = None) -> 
     return {
         "meta": {"client": CONFIG.get("name"), "slug": CONFIG.get("slug"), "generated": generated, "asOf": client["asOf"],
                  "currency": "ILS", "detailFrom": detail_from, "presets": client["presets"], "schema": 2, "mode": "project",
-                 "single": not PROJECTS, "validLeads": valid_mode, "kpi": kp, "month": month, "leadsUnassigned": unmatched,
+                 "single": not PROJECTS, "label": G.get("label"), "validLeads": valid_mode, "kpi": kp, "month": month, "leadsUnassigned": unmatched,
                  "platforms": client["client"]["platforms"]},
         "days": day_list, "courses": groups, "campaigns": campaigns, "rows": rows, "leadRows": lead_rows,
         "valRows": val_rows, "units": units.items, "unitRows": unit_rows, "dims": dims, "breakdowns": bd,

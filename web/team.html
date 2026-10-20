@@ -199,7 +199,7 @@ a.cl{color:inherit;text-decoration:none}a.cl:hover{text-decoration:underline}a.c
   .cb{padding:12px}
   .bd .row{grid-template-columns:minmax(80px,1fr) 1.2fr repeat(2,52px)}.bd .row > :nth-child(5){display:none}
 }
-.novl .vl{display:none}.noval .val{display:none}
+.novl .vl{display:none}.isvl .vl,.isvl .pl{display:none}.noval .val{display:none}
 .pwbox{position:relative}.gate .pwbox input{padding-inline-start:44px;padding-inline-end:44px}
 .gate .eye{position:absolute;inset-inline-start:6px;top:50%;transform:translateY(-50%);width:34px;height:34px;border:0;background:transparent;cursor:pointer;color:#7A7A72;display:grid;place-items:center;border-radius:8px;margin:0;padding:0}
 .gate .eye:hover{background:#F4F4F2;color:#141B34}.gate .eye svg{width:20px;height:20px}
@@ -342,6 +342,7 @@ const addDays = (s,n) => { const d = new Date(s+'T00:00:00Z'); d.setUTCDate(d.ge
 const days = (a,b) => Math.round((new Date(b+'T00:00:00Z') - new Date(a+'T00:00:00Z'))/864e5) + 1;
 const derive = t => (t.ctr = t.i ? t.k/t.i : null, t.cpl = t.l ? t.s/t.l : null, t.cr = t.k ? t.l/t.k : null, t);
 const zero = () => ({i:0,k:0,l:0,s:0,v:0,r:0});
+const GL = () => (D && D.meta.label) || {p:'פרויקטים', s:'פרויקט'};
 const MODE = () => (D && D.meta.mode) || 'course';
 const bkey = c => MODE()==='project' ? c.key + '|' + D.meta.month : c.key;
 const vderive = t => (t.vcpl = t.v ? t.s/t.v : null, t.vr = t.l ? t.v/t.l : null, t);
@@ -397,11 +398,11 @@ async function start(d){
   D = d; DAY = d.days;
   document.title = `BRIGHT · ${d.meta.client} · צוות`;
   $('cName').textContent = '· ' + d.meta.client;
-  document.body.classList.toggle('novl', !VL()); document.body.classList.toggle('noval', !K().value);
+  document.body.classList.toggle('novl', !VL()); document.body.classList.toggle('isvl', VL()); document.body.classList.toggle('noval', !K().value);
   const MO = d.meta.mode === 'course' ? 'course' : d.meta.single ? 'single' : 'project';
-  $('grpTitle').textContent = {course:'קורסים', project:'פרויקטים', single:'החשבון'}[MO];
+  $('grpTitle').textContent = {course:'קורסים', project:GL().p, single:'החשבון'}[MO];
   $('grpSub').textContent = {course:'כל הפלטפורמות מרוכזות לפי קורס · לחיצה פותחת קמפיינים, סטים ומודעות',
-    project:'כל הפלטפורמות מרוכזות לפי פרויקט · לחיצה פותחת קהלים, קמפיינים, סטים ומודעות',
+    project:`כל הפלטפורמות מרוכזות לפי ${GL().s} · לחיצה פותחת קהלים, קמפיינים, סטים ומודעות`,
     single:'תקציב חודשי, קצב וכל הקמפיינים · לחיצה פותחת קמפיינים, סטים ומודעות'}[MO];
   $('defs').innerHTML = `<b>הגדרות:</b> ${K().label} = ${({leads:'התוצאה שהוגדרה ללקוח בכל פלטפורמה', purchase:'רכישות; הכנסות ו-ROAS לפי ערך הרכישה בפלטפורמות', traffic:'הקלקות (ללקוח אין מעקב המרות)'})[K().type]}.
     ${VL() ? '<b>לידים תקינים</b> = מ-CRM (LEAD.IM) לפי utm_campaign; לידים בלי שם קמפיין מופיעים כ"לא משויך לקמפיין". ' : ''}
@@ -414,10 +415,8 @@ async function start(d){
   if (lag > 0) $('asOf').insertAdjacentHTML('afterend', ` <span style="color:#FBDD5C;font-weight:700">⚠ הנתונים בפיגור של ${lag} ${lag===1?'יום':'ימים'} – העדכון האוטומטי לא רץ</span>`);
   $('updated').textContent = new Date(d.meta.generated).toLocaleString('he-IL',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jerusalem'});
   $('detailFrom').textContent = fmt.date(d.meta.detailFrom);
-  if (d.meta.leadsMissing)
-    $('asOf').insertAdjacentHTML('afterend', ' <span style="color:#FBDD5C;font-weight:700">⚠ לידים תקינים מ-CRM עדיין לא מחוברים – מוצגים לידים מהפלטפורמות</span>');
   if (VL() && d.meta.leadsSource !== 'windsor')
-    $('asOf').insertAdjacentHTML('afterend', ` <span style="color:#FBDD5C;font-weight:700">⚠ ${d.meta.leadsSource === 'local' ? 'לידים תקינים מתצוגה מקומית' : 'לידים תקינים מ-LEAD.IM עדיין לא מחוברים'}</span>`);
+    $('asOf').insertAdjacentHTML('afterend', ` <span style="color:#FBDD5C;font-weight:700">⚠ ${d.meta.leadsSource === 'local' ? 'לידים מהגיליון – תצוגה מקומית' : 'הגיליון של LEAD.IM לא מחובר – הלידים לא מתעדכנים (לא מוצגים לידים מהפלטפורמות)'}</span>`);
   $('tokInfo').textContent = d.meta.write ? '' : 'שמירת תקציבים משותפת: לא הוגדרה.';
   for (const el of [from,to]){ el.min = DAY.reduce((a,b)=>a<b?a:b); el.max = d.meta.asOf; }
   document.querySelectorAll('.chip').forEach(c => c.onclick = () => setKey(c.dataset.p));
@@ -492,12 +491,12 @@ function render(){
     return `<small class="${Math.abs(ch)<.005?'':good?'good':'bad'}">${ch>0?'▲':'▼'} ${Math.abs(ch*100).toFixed(0)}% ${CMP.mode==='same'?'מול החודש הקודם':'מול תקופה קודמת'}</small>`; };
   const KP = MODE()==='project' ? [
     ['השקעה', fmt.ils(T.s), dl(T.s,P.s,null)], [VLAB(), fmt.int(T.v), dl(T.v,P.v)], [VCPA(), or(T.vcpl,fmt.ils2), dl(T.vcpl,P.vcpl,true)],
-    VL() ? ['לידים בפלטפורמה', fmt.int(T.l), `<small>${or(T.vr,fmt.pct)} מהם הגיעו כתקינים</small>`]
+    VL() ? ['CTR', or(T.ctr,fmt.pct), dl(T.ctr,P.ctr)]
       : K().value ? ['הכנסות', fmt.ils(T.r), `<small>ROAS ${or(roas(T), v => v.toFixed(2))}</small>`]
       : ['CTR', or(T.ctr,fmt.pct), dl(T.ctr,P.ctr)],
     D.meta.single ? ['קמפיינים באוויר', fmt.int(liveCamps), `<small>${D.campaigns.filter(c=>!c.pseudo).length} קמפיינים בסה"כ</small>`]
-      : state.prj != null && PRJBAR() ? ['קמפיינים באוויר', fmt.int(liveCamps), `<small>${D.courses[state.prj].campaigns.filter(ci => !D.campaigns[ci].pseudo).length} קמפיינים בפרויקט</small>`]
-      : ['פרויקטים פעילים', fmt.int(D.courses.filter(c => !c.brand && c.live).length), `<small>${liveCamps} קמפיינים באוויר</small>`],
+      : state.prj != null && PRJBAR() ? ['קמפיינים באוויר', fmt.int(liveCamps), `<small>${D.courses[state.prj].campaigns.filter(ci => !D.campaigns[ci].pseudo).length} קמפיינים ב${GL().s}</small>`]
+      : [`${GL().p} פעילים`, fmt.int(D.courses.filter(c => !c.brand && c.live).length), `<small>${liveCamps} קמפיינים באוויר</small>`],
     ['התראות', fmt.int(prjAlerts().length), `<small>${prjAlerts().filter(x=>x.sev==='high').length} דחופות</small>`]
   ] : null;
   $('kpis').innerHTML = (KP || [
@@ -521,7 +520,7 @@ function renderPrjBar(cp){
   const lab = VL() ? 'תקינים' : K().label;
   const tile = (k, name, t, extra='') => `<button type="button" data-k="${k}" class="${String(state.prj ?? 'all')===k?'on':''} ${extra}">
     <b>${esc(name)}</b><small class="num">${fmt.ils(t.s)} · ${fmt.int(VL() || MODE()==='project' ? t.v : t.l)} ${lab}</small></button>`;
-  bar.innerHTML = `<div class="lbl">בחירת פרויקט</div><div class="tiles">${tile('all', 'כל הפרויקטים', all)}${
+  bar.innerHTML = `<div class="lbl">בחירת ${GL().s}</div><div class="tiles">${tile('all', 'כל ה' + GL().p, all)}${
     D.courses.map((c,i) => tile(String(i), c.name, tot[i], c.brand ? 'brand' : '')).join('')}</div>`;
   bar.querySelectorAll('button').forEach(b => b.onclick = () => {
     state.prj = b.dataset.k === 'all' ? null : +b.dataset.k;
@@ -686,7 +685,7 @@ async function saveBudgetOnce(key, raw){
 }
 
 function paceHtml(c){
-  if (c.brand) return `<div class="mt"><span>תקציב</span><b>—</b><small>ללא תקציב פרויקט</small></div>`;
+  if (c.brand) return `<div class="mt"><span>תקציב</span><b>—</b><small>ללא תקציב ${GL().s}</small></div>`;
   const K = bkey(c), PRJ = MODE()==='project';
   const monthName = PRJ ? new Date(D.meta.month + '-01T00:00:00').toLocaleString('he-IL',{month:'long'}) : '';
   const editBtn = `<button class="bedit" data-edit="${esc(K)}" title="עריכת תקציב">✎ ${c.budget ? 'עריכה' : 'הזנת תקציב'}</button>`;
@@ -694,7 +693,7 @@ function paceHtml(c){
     <div class="bform"><input type="number" min="0" step="100" id="bIn" value="${BUD[K]?.budget ?? c.budgetName ?? ''}" placeholder="₪">
       <button class="ok" data-save="${esc(K)}">שמירה</button><button class="no" data-cancel="1">ביטול</button>
       ${BUD[K] ? `<button class="rm" data-clear="${esc(K)}">מחיקה</button>` : ''}</div>
-    <small>${c.budgetName ? `מהשמות: <span class="num">${fmt.ils(c.budgetName)}</span> · ` : ''}${PRJ ? 'לכל הפלטפורמות של הפרויקט בחודש הנוכחי' : 'תקציב ידני כולל את כל הפלטפורמות'}</small></div>`;
+    <small>${c.budgetName ? `מהשמות: <span class="num">${fmt.ils(c.budgetName)}</span> · ` : ''}${PRJ ? `לכל הפלטפורמות של ה${GL().s} בחודש הנוכחי` : 'תקציב ידני כולל את כל הפלטפורמות'}</small></div>`;
   if (!c.budget) return `<div class="mt"><span>${PRJ ? `תקציב ${monthName}` : 'תקציב'} ${editBtn}</span><b>לא הוגדר</b><small>הוצא <span class="num">${fmt.ils(PRJ ? c.budgetSpent : c.spent)}</span>${PRJ ? ' החודש' : ''}${c.dailySet?` · יומי מוגדר ב-Meta <span class="num">${fmt.ils(c.dailySet)}</span>`:''}</small></div>`;
   const used = c.budgetSpent / c.budget, exp = Math.min(1, c.elapsedPct ?? 1);
   const cls = c.pace==null ? '' : c.pace > 1.15 ? 'bad' : c.pace < .8 && c.phase!=='ended' ? 'warn' : 'good';
@@ -745,14 +744,14 @@ function renderCourses(cp, inP){
           <span>${c.live} באוויר</span></div></div>
         ${paceHtml(c)}
         ${dailyHtml(c)}
-        ${PRJ ? `<div class="mt"><span>בתקופה · ${VLAB()}</span><b class="num">${fmt.int(per.v)}</b><small><span class="num">${fmt.ils(per.s)}</span> · ${K().type==='traffic'?'CPC':'CPA'} <span class="num">${or(per.vcpl,fmt.ils2)}</span>${VL() ? ` · בפלטפורמה ${fmt.int(per.l)}` : ''}${K().value ? ` · ROAS ${or(roas(per), v => v.toFixed(2))}` : ''}</small></div>
+        ${PRJ ? `<div class="mt"><span>בתקופה · ${VLAB()}</span><b class="num">${fmt.int(per.v)}</b><small><span class="num">${fmt.ils(per.s)}</span> · ${K().type==='traffic'?'CPC':'CPA'} <span class="num">${or(per.vcpl,fmt.ils2)}</span>${K().value ? ` · ROAS ${or(roas(per), v => v.toFixed(2))}` : ''}</small></div>
         <div class="mt"><span>מתחילת החודש</span><b class="num">${fmt.int(c.monthValid)} ${VL() ? 'תקינים' : K().label}</b><small><span class="num">${fmt.ils(c.budgetSpent ?? c.monthSpent)}</span> · ${K().type==="traffic"?"CPC":"CPA"} <span class="num">${or((c.budgetSpent ?? c.monthSpent) / c.monthValid, fmt.ils2)}</span></small></div>`
         : `<div class="mt"><span>בתקופה</span><b class="num">${fmt.int(per.l)} ${K().label}</b><small><span class="num">${fmt.ils(per.s)}</span> · CPL <span class="num">${or(per.cpl,fmt.ils2)}</span></small></div>
         <div class="mt"><span>מצטבר לקורס</span><b class="num">${fmt.int(c.leads)} ${K().label}</b><small><span class="num">${fmt.ils(c.spent)}</span> · CPL <span class="num">${or(c.cpl,fmt.ils2)}</span></small></div>`}
         <span class="chev">▾</span>
       </div>
       <div class="cb">${open ? courseBody(c, cp, ut) : ''}</div></div>`;
-  }).join('') : `<div class="card empty">אין ${MODE()==='project' ? 'פרויקטים' : 'קורסים'} בקטגוריה הזו</div>`;
+  }).join('') : `<div class="card empty">אין ${MODE()==='project' ? GL().p : 'קורסים'} בקטגוריה הזו</div>`;
   const C = $('courses');
   C.querySelectorAll('[data-edit]').forEach(b => b.onclick = e => { e.stopPropagation(); state.editing = b.dataset.edit; renderCourses(cp, inP);
     const i = $('bIn'); if (i){ i.focus(); i.select(); } });
@@ -775,7 +774,7 @@ function courseBody(c, cp, ut){
   const PRJ = MODE()==='project';
   const mk = PL.filter(p => c.campaigns.some(ci => D.campaigns[ci].p===p)).map(p =>
     PRJ ? `<div>${pBadge(p)}<b class="num" style="display:block">${fmt.ils(byP[p].s)} · ${fmt.int(byP[p].v)} ${VL() ? 'תקינים' : K().label}</b>
-      <span>${VCPA()} ${or(byP[p].vcpl,fmt.ils2)}${VL() ? ` · בפלטפורמה ${fmt.int(byP[p].l)}` : ''}${K().value ? ` · ROAS ${or(roas(byP[p]), v => v.toFixed(2))}` : ''}</span></div>`
+      <span>${VCPA()} ${or(byP[p].vcpl,fmt.ils2)}${K().value ? ` · ROAS ${or(roas(byP[p]), v => v.toFixed(2))}` : ''}</span></div>`
     : `<div>${pBadge(p)}<b class="num" style="display:block">${fmt.ils(byP[p].s)} · ${fmt.int(byP[p].l)} ${K().label}</b>
       <span>CPL ${or(byP[p].cpl,fmt.ils2)} · CTR ${or(byP[p].ctr,fmt.pct)}</span></div>`).join('');
   let audTab = '';
@@ -802,7 +801,7 @@ function courseBody(c, cp, ut){
   const units = D.units.map((u,i) => ({...u, t:ut[i]})).filter(u => set.has(u.c) && (u.t.i || u.t.s)).sort((x,y) => y.t.s - x.t.s);
   const all = state.more.has(c.key), shown = all ? units : units.slice(0, 12);
   const utab = units.length ? `<table><thead><tr><th>מודעה / סט</th><th>פלטפורמה</th><th>השקעה</th><th>חשיפות</th><th>הקלקות</th><th>CTR</th>
-      <th class="hl">${VL() ? 'לידים בפלטפורמה' : K().label}</th><th class="hl">${K().cpa}</th><th>${K().rate}</th></tr></thead><tbody>${shown.map(u => {
+      <th class="hl pl">${K().label}</th><th class="hl pl">${K().cpa}</th><th class="pl">${K().rate}</th></tr></thead><tbody>${shown.map(u => {
       const t = u.t, title = u.ad || u.set;
       const L = u.links || {};
       let img = u.p==='meta' ? (u.thumb ? `<img src="${esc(u.thumb)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ph',textContent:'—'}))">` : `<span class="ph">—</span>`) : '';
@@ -810,7 +809,7 @@ function courseBody(c, cp, ut){
       const links = `<span class="lk">${ext(L.preview, LINK_HE.preview, 'pv')}${ext(L.post, LINK_HE.post, 'pv')}${ext(L.manage, LINK_HE.manage[u.p])}</span>`;
       return `<tr class="pr-${u.p}"><td><div class="ad">${img}<div class="nm"><b>${esc(title)}</b><small>${u.ad ? (u.p==='linkedin' ? 'קריאייטיב' : 'סט: '+esc(u.set)) : 'קבוצת מודעות'}${u.setStatus?` · ${esc(String(u.setStatus).toLowerCase())}`:''}</small>${links}</div></div></td>
         <td>${pBadge(u.p)}</td><td class="num">${fmt.ils(t.s)}</td><td class="num">${fmt.int(t.i)}</td><td class="num">${fmt.int(t.k)}</td><td class="num">${or(t.ctr,fmt.pct)}</td>
-        <td class="num hl"><b>${fmt.int(t.l)}</b></td><td class="num hl">${or(t.cpl,fmt.ils2)}</td><td class="num">${or(t.cr,fmt.pct)}</td></tr>`; }).join('')}</tbody></table>` : '';
+        <td class="num hl pl"><b>${fmt.int(t.l)}</b></td><td class="num hl pl">${or(t.cpl,fmt.ils2)}</td><td class="num pl">${or(t.cr,fmt.pct)}</td></tr>`; }).join('')}</tbody></table>` : '';
   return `<div class="mini-kpis">${mk}</div>
     ${audTab}<h5>קמפיינים בתקופה</h5><div class="tbl-wrap">${ctab}</div>
     <h5>סטים, קבוצות מודעות ומודעות</h5>${units.length ? `<div class="tbl-wrap">${utab}</div>
@@ -827,7 +826,7 @@ function renderBreakdowns(inP){
   const sel = $('bdCourse');
   if (PRJBAR() && state.prj != null) state.bdCourse = String(state.prj);
   sel.style.display = PRJBAR() && state.prj != null ? 'none' : '';
-  const opts = [['all', MODE()==='project' ? 'כל הפרויקטים' : 'כל הקורסים'],['live', MODE()==='project' ? 'פרויקטים פעילים בלבד' : 'קורסים פעילים בלבד'], ...D.courses.map((c,i) => [String(i), c.name + (c.start?` (${fmt.date(c.start)})`:'')])];
+  const opts = [['all', MODE()==='project' ? 'כל ה' + GL().p : 'כל הקורסים'],['live', MODE()==='project' ? GL().p + ' פעילים בלבד' : 'קורסים פעילים בלבד'], ...D.courses.map((c,i) => [String(i), c.name + (c.start?` (${fmt.date(c.start)})`:'')])];
   sel.innerHTML = opts.map(([v,l]) => `<option value="${v}" ${state.bdCourse===v?'selected':''}>${esc(l)}</option>`).join('');
   sel.disabled = p==='linkedin';
   sel.onchange = () => { state.bdCourse = sel.value; render(); };
@@ -868,11 +867,11 @@ function rowsPanel(title, entries){
   if (!entries.length) return `<div class="card bd"><h4>${title}</h4><div class="empty">אין נתונים</div></div>`;
   const max = Math.max(...entries.map(([,t]) => t.s)), tot = entries.reduce((s,[,t]) => s+t.s, 0);
   return `<div class="card bd"><h4>${title}</h4>
-    <div class="row hd"><span></span><span>השקעה</span><span>${VL() ? 'לידים (פלטפ׳)' : K().label}</span><span>${K().cpa}</span><span>CTR</span></div>
+    <div class="row hd"><span></span><span>השקעה</span><span>${VL() ? 'הקלקות' : K().label}</span><span>${VL() ? 'CPC' : K().cpa}</span><span>CTR</span></div>
     ${entries.slice(0, 12).map(([l,t]) => `<div class="row"><span>${esc(l)}</span>
       <div><div class="bar"><i style="width:${t.s/max*100}%;background:${PLAT[state.bdPlat].color}"></i></div>
         <small class="num" style="color:var(--mute-2)">${fmt.ils(t.s)} · ${(t.s/tot*100).toFixed(0)}%</small></div>
-      <b class="num">${fmt.int(t.l)}</b><span class="num">${or(t.cpl,fmt.ils2)}</span><span class="num">${or(t.ctr,fmt.pct)}</span></div>`).join('')}</div>`;
+      <b class="num">${fmt.int(VL() ? t.k : t.l)}</b><span class="num">${or(VL() ? (t.k ? t.s/t.k : null) : t.cpl,fmt.ils2)}</span><span class="num">${or(t.ctr,fmt.pct)}</span></div>`).join('')}</div>`;
 }
 
 

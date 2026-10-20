@@ -54,6 +54,8 @@ engine = __import__("group_course" if CONFIG.get("grouping", {}).get("mode") == 
 payload = engine.build(client, raw, lambda d: 1.0, now, fetch_team.load_budgets(pw))
 payload["meta"]["write"] = None
 payload["meta"]["leadsSource"] = locals().get("src")
+if payload["meta"].get("validLeads"):
+    fetch_team.sheet_leads_to_client(client, payload)
 BUILD_DIR.mkdir(parents=True, exist_ok=True)
 (BUILD_DIR / "summary.json").write_text(json.dumps(fetch_team.summary(payload, client), ensure_ascii=False), encoding="utf-8")
 if pw:
