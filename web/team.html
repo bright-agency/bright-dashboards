@@ -412,7 +412,9 @@ async function start(d){
   $('asOf').textContent = fmt.date(d.meta.asOf);
   const ilToday = new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Jerusalem'}).format(new Date());
   const lag = days(d.meta.asOf, ilToday) - 2;      // 0 = up to yesterday, as expected
-  if (lag > 0) $('asOf').insertAdjacentHTML('afterend', ` <span style="color:#FBDD5C;font-weight:700">⚠ הנתונים בפיגור של ${lag} ${lag===1?'יום':'ימים'} – העדכון האוטומטי לא רץ</span>`);
+  const ilHour = +new Intl.DateTimeFormat('en-GB', {timeZone:'Asia/Jerusalem', hour:'numeric', hourCycle:'h23'}).format(new Date());
+  // right after midnight yesterday is not in yet - warn only when the morning runs should already have brought it
+  if (lag > 1 || (lag === 1 && ilHour >= 9)) $('asOf').insertAdjacentHTML('afterend', ` <span style="color:#FBDD5C;font-weight:700">⚠ הנתונים בפיגור של ${lag} ${lag===1?'יום':'ימים'} – העדכון האוטומטי לא רץ</span>`);
   $('updated').textContent = new Date(d.meta.generated).toLocaleString('he-IL',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jerusalem'});
   $('detailFrom').textContent = fmt.date(d.meta.detailFrom);
   if (VL() && d.meta.leadsSource === 'partial')
