@@ -111,5 +111,10 @@
     "history_until": "2026-08-25",
     "windsor_connector": "googlesheets",
     "history_gid": "1834034680"
+  },
+  "team": {
+    "unit_platforms": [
+      "meta"
+    ]
   }
 }

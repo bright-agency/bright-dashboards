@@ -36,6 +36,7 @@ def datasets() -> dict:
         "g_adgroup":    ("google", ["date", "campaign", "ad_group_name", "ad_group_status"] + G(), "detail"),
         "g_adgroup_info": ("google", ["campaign", "campaign_id", "ad_group_name", "ad_group_id"], "detail"),
         "g_device":     ("google", ["date", "campaign", "device"] + G(), "detail"),
+        "g_network":    ("google", ["date", "campaign", "ad_network_type"] + G(), "detail"),
         "li_creative":  ("linkedin", ["date", "campaign", "creative_id", "sponsored_creative_content_title",
                                       "creative_content_data_share_ad_context_dsc_name"] + L(), "detail"),
         "li_creative_info": ("linkedin", ["creative_id", "campaign", "campaign_id", "ad_post_url"], "detail"),

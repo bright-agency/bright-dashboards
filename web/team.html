@@ -125,6 +125,7 @@ main{padding:22px 0 56px}
 .cb{display:none;border-top:1px solid var(--hair);background:var(--surface-2);padding:16px 18px}
 .course.open .cb{display:block}
 .cb h5{margin:4px 0 10px;font-size:15px;font-weight:800}
+.ptab{min-width:720px}.ptab td:first-child{text-align:right}
 .mini-kpis{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .mini-kpis div{background:#fff;border:1px solid var(--hair);border-radius:12px;padding:8px 12px;min-width:120px}
 .mini-kpis > div > span:not(.picon):not(.pb){display:block;font-size:11.5px;color:var(--mute-2);font-weight:600}
@@ -315,7 +316,9 @@ const DIM_HE = {
   right_hand_column:'עמודה ימנית', search:'חיפוש', an_classic:'קלאסי', rewarded_video:'וידאו מתגמל', instream_video:'In-stream',
   facebook_profile_feed:'פיד פרופיל', instagram_profile_feed:'פיד פרופיל', notification:'התראות', facebook_reels_overlay:'Reels Overlay',
   mobile_app:'מובייל', desktop:'דסקטופ', mobile_web:'מובייל ווב', unknown:'לא ידוע', MOBILE:'מובייל', DESKTOP:'דסקטופ', TABLET:'טאבלט',
-  CONNECTED_TV:'טלוויזיה', OTHER:'אחר', female:'נשים', male:'גברים'
+  CONNECTED_TV:'טלוויזיה', OTHER:'אחר', female:'נשים', male:'גברים',
+  SEARCH:'חיפוש', SEARCH_PARTNERS:'שותפי חיפוש', CONTENT:'רשת המדיה (Display)', YOUTUBE:'YouTube', YOUTUBE_SEARCH:'YouTube',
+  YOUTUBE_WATCH:'YouTube', DISCOVER:'Discover / Demand Gen', GMAIL:'Gmail', MAPS:'מפות', CROSS_NETWORK:'חוצה רשתות'
 };
 const he = s => DIM_HE[s] || s;
 
@@ -776,7 +779,14 @@ function courseBody(c, cp, ut){
   c.campaigns.forEach(ci => { const t = cp[ci]; add(byP[D.campaigns[ci].p], t.i,t.k,t.l,t.s); byP[D.campaigns[ci].p].v += t.v; byP[D.campaigns[ci].p].r += t.r; });
   PL.forEach(p => { derive(byP[p]); vderive(byP[p]); });
   const PRJ = MODE()==='project';
-  const mk = PL.filter(p => c.campaigns.some(ci => D.campaigns[ci].p===p)).map(p =>
+  const PLS = PL.filter(p => c.campaigns.some(ci => D.campaigns[ci].p===p));
+  const ptab = `<table class="ptab"><thead><tr><th>פלטפורמה</th><th>השקעה</th><th>חשיפות</th><th>הקלקות</th><th>CTR</th>
+      <th class="hl">${PRJ ? VLAB() : K().label}</th><th class="hl">${PRJ ? VCPA() : K().cpa}</th><th>שיעור המרה</th><th class="val">הכנסות</th><th class="val">ROAS</th></tr></thead><tbody>${
+    PLS.map(p => { const t = byP[p], L = PRJ ? t.v : t.l;
+      return `<tr class="pr-${p}"><td>${pBadge(p)}</td><td class="num">${fmt.ils(t.s)}</td><td class="num">${fmt.int(t.i)}</td><td class="num">${fmt.int(t.k)}</td>
+        <td class="num">${or(t.ctr,fmt.pct)}</td><td class="num hl"><b>${fmt.int(L)}</b></td><td class="num hl">${or(L ? t.s/L : null,fmt.ils2)}</td>
+        <td class="num">${or(t.k ? L/t.k : null,fmt.pct)}</td><td class="num val">${fmt.ils(t.r)}</td><td class="num val">${or(roas(t), v => v.toFixed(2))}</td></tr>`; }).join('')}</tbody></table>`;
+  const mk = PLS.map(p =>
     PRJ ? `<div>${pBadge(p)}<b class="num" style="display:block">${fmt.ils(byP[p].s)} · ${fmt.int(byP[p].v)} ${VL() ? 'תקינים' : K().label}</b>
       <span>${VCPA()} ${or(byP[p].vcpl,fmt.ils2)}${K().value ? ` · ROAS ${or(roas(byP[p]), v => v.toFixed(2))}` : ''}</span></div>`
     : `<div>${pBadge(p)}<b class="num" style="display:block">${fmt.ils(byP[p].s)} · ${fmt.int(byP[p].l)} ${K().label}</b>
@@ -790,7 +800,8 @@ function courseBody(c, cp, ut){
       rows_.map(([k,t]) => `<tr><td><b>${esc(k)}</b></td><td class="num">${fmt.ils(t.s)}</td><td class="num">${fmt.int(t.i)}</td><td class="num">${fmt.int(t.k)}</td>
         <td class="num hl"><b>${fmt.int(t.v)}</b></td><td class="num hl">${or(t.vcpl,fmt.ils2)}</td><td class="num vl">${fmt.int(t.l)}</td><td class="num vl">${or(t.vr,fmt.pct)}</td><td class="num val">${fmt.ils(t.r)}</td><td class="num val">${or(roas(t), v => v.toFixed(2))}</td></tr>`).join('')}</tbody></table></div>` : '';
   }
-  const camps = c.campaigns.slice().sort((x,y) => cp[y].s - cp[x].s);
+  const LV = ci => PRJ ? cp[ci].v : cp[ci].l, LIVE = ci => D.campaigns[ci].status === 'live' ? 0 : 1;
+  const camps = c.campaigns.slice().sort((x,y) => LIVE(x) - LIVE(y) || LV(y) - LV(x) || cp[y].s - cp[x].s);
   const ctab = `<table><thead><tr><th>קמפיין</th><th>סטטוס</th><th>${PRJ ? 'קהל' : 'תקציב (שם)'}</th><th>יומי מוגדר</th><th>השקעה</th><th>חשיפות</th><th>הקלקות</th><th>CTR</th>
       ${PRJ ? `<th class="hl">${VLAB()}</th><th class="hl">${VCPA()}</th><th class="vl">בפלטפורמה</th>` : `<th class="hl">${K().label}</th><th class="hl">${K().cpa}</th><th>${K().rate}</th>`}<th class="val">הכנסות</th><th class="val">ROAS</th></tr></thead><tbody>${camps.filter(ci => !PRJ || cp[ci].s || cp[ci].v || cp[ci].i).map(ci => {
       const m = D.campaigns[ci], t = cp[ci];
@@ -802,7 +813,8 @@ function courseBody(c, cp, ut){
               : `<td class="num hl"><b>${fmt.int(t.l)}</b></td><td class="num hl">${or(t.cpl,fmt.ils2)}</td><td class="num">${or(t.cr,fmt.pct)}</td>`}<td class="num val">${fmt.ils(t.r)}</td><td class="num val">${or(roas(t), v => v.toFixed(2))}</td></tr>`; }).join('')}</tbody></table>`;
 
   const set = new Set(c.campaigns);
-  const units = D.units.map((u,i) => ({...u, t:ut[i]})).filter(u => set.has(u.c) && (u.t.i || u.t.s)).sort((x,y) => y.t.s - x.t.s);
+  const UP = D.meta.unitPlatforms;
+  const units = D.units.map((u,i) => ({...u, t:ut[i]})).filter(u => set.has(u.c) && (u.t.i || u.t.s) && (!UP || UP.includes(u.p))).sort((x,y) => y.t.s - x.t.s);
   const all = state.more.has(c.key), shown = all ? units : units.slice(0, 12);
   const utab = units.length ? `<table><thead><tr><th>מודעה / סט</th><th>פלטפורמה</th><th>השקעה</th><th>חשיפות</th><th>הקלקות</th><th>CTR</th>
       <th class="hl pl">${K().label}</th><th class="hl pl">${K().cpa}</th><th class="pl">${K().rate}</th></tr></thead><tbody>${shown.map(u => {
@@ -814,9 +826,9 @@ function courseBody(c, cp, ut){
       return `<tr class="pr-${u.p}"><td><div class="ad">${img}<div class="nm"><b>${esc(title)}</b><small>${u.ad ? (u.p==='linkedin' ? 'קריאייטיב' : 'סט: '+esc(u.set)) : 'קבוצת מודעות'}${u.setStatus?` · ${esc(String(u.setStatus).toLowerCase())}`:''}</small>${links}</div></div></td>
         <td>${pBadge(u.p)}</td><td class="num">${fmt.ils(t.s)}</td><td class="num">${fmt.int(t.i)}</td><td class="num">${fmt.int(t.k)}</td><td class="num">${or(t.ctr,fmt.pct)}</td>
         <td class="num hl pl"><b>${fmt.int(t.l)}</b></td><td class="num hl pl">${or(t.cpl,fmt.ils2)}</td><td class="num pl">${or(t.cr,fmt.pct)}</td></tr>`; }).join('')}</tbody></table>` : '';
-  return `<div class="mini-kpis">${mk}</div>
+  return `<h5>לפי פלטפורמה</h5><div class="tbl-wrap">${ptab}</div>
     ${audTab}<h5>קמפיינים בתקופה</h5><div class="tbl-wrap">${ctab}</div>
-    <h5>סטים, קבוצות מודעות ומודעות</h5>${units.length ? `<div class="tbl-wrap">${utab}</div>
+    <h5>${D.meta.unitPlatforms && D.meta.unitPlatforms.join() === 'meta' ? 'מודעות פייסבוק' : 'סטים, קבוצות מודעות ומודעות'}</h5>${units.length ? `<div class="tbl-wrap">${utab}</div>
     ${units.length > 12 ? `<button class="more" data-k="${esc(c.key)}">${all ? 'הצג פחות' : `הצג את כל ${units.length}`}</button>` : ''}` : `<div class="empty">אין נתוני מודעות בתקופה הזו</div>`}`;
 }
 
@@ -838,12 +850,26 @@ function renderBreakdowns(inP){
     if (state.bdCourse==='all') return true; if (state.bdCourse==='live') return D.courses[c.course].phase!=='ended';
     return String(c.course) === state.bdCourse; };
 
-  const panel = (title, name, mapLabel) => {
+  const panel = (title, name, mapLabel, only = null) => {
     const dims = D.dims[name] || [], tot = dims.map(zero);
-    for (const [d,ci,di,i,k,l,s] of (D.breakdowns[name]||[])) if (inP(d) && okCamp(ci)) add(tot[di],i,k,l,s);
+    for (const [d,ci,di,i,k,l,s] of (D.breakdowns[name]||[])) if (inP(d) && okCamp(ci) && (!only || only(ci))) add(tot[di],i,k,l,s);
     const merged = {};
     tot.forEach((t,di) => { const lab = mapLabel(dims[di]); const m = merged[lab] ||= zero(); add(m,t.i,t.k,t.l,t.s); });
     return rowsPanel(title, Object.entries(merged).map(([l,t]) => [l, derive(t)]));
+  };
+  // full table: one row per Google channel (PMAX campaigns of the selected project / filter)
+  const netTable = (title, only) => {
+    const dims = D.dims.google_network || [], tot = {};
+    for (const [d,ci,di,i,k,l,s] of (D.breakdowns.google_network||[])) if (inP(d) && okCamp(ci) && only(ci)) add(tot[he(dims[di])] ||= zero(),i,k,l,s);
+    const rows_ = Object.entries(tot).map(([n,t]) => [n, derive(t)]).filter(([,t]) => t.s > 0 || t.i > 0).sort((x,y) => y[1].s - x[1].s);
+    if (!rows_.length) return `<div class="card bd" style="grid-column:1/-1"><h4>${title}</h4><div class="empty">אין קמפייני PMAX בתקופה / בסינון הזה</div></div>`;
+    const S = zero(); rows_.forEach(([,t]) => add(S,t.i,t.k,t.l,t.s)); derive(S);
+    const tr = (n, t, cls='') => `<tr class="${cls}"><td><b>${esc(n)}</b></td><td class="num">${fmt.ils(t.s)}</td><td class="num">${S.s ? (t.s/S.s*100).toFixed(0)+'%' : '—'}</td>
+      <td class="num">${fmt.int(t.i)}</td><td class="num">${fmt.int(t.k)}</td><td class="num">${or(t.ctr,fmt.pct)}</td>
+      <td class="num hl"><b>${fmt.int(t.l)}</b></td><td class="num hl">${or(t.cpl,fmt.ils2)}</td><td class="num">${or(t.cr,fmt.pct)}</td></tr>`;
+    return `<div class="card bd" style="grid-column:1/-1"><h4>${title}</h4><div class="tbl-wrap"><table style="min-width:720px"><thead><tr><th>אפיק</th><th>השקעה</th><th>% מההשקעה</th><th>חשיפות</th><th>הקלקות</th><th>CTR</th>
+      <th class="hl">לידים (Google)</th><th class="hl">עלות לליד</th><th>שיעור המרה</th></tr></thead><tbody>${rows_.map(([n,t]) => tr(n,t)).join('')}</tbody>
+      <tfoot>${tr('סה"כ PMAX', S, 'tot')}</tfoot></table></div></div>`;
   };
   let html = '', note = '';
   const [a] = range();
@@ -853,7 +879,9 @@ function renderBreakdowns(inP){
       + panel('פלטפורמה', 'meta_place', s => he(s.split('·')[0]))
       + panel('גיל', 'meta_age', s => s) + panel('מגדר', 'meta_gender', s => he(s)) + panel('מכשיר', 'meta_device', s => he(s));
   } else if (p==='google'){
-    html = panel('מכשיר', 'google_device', s => he(s));
+    const isPmax = ci => /pmax|performance max/i.test(D.campaigns[ci].name);
+    html = (D.dims.google_network ? netTable('אפיקי פרסום בקמפייני PMAX', isPmax) : '') + panel('מכשיר', 'google_device', s => he(s));
+    if (D.dims.google_network) note = (note ? note + ' ' : '') + 'לידים לפי אפיק = המרות שגוגל מדווח (הגיליון לא מפרט אפיק). השקעה, חשיפות והקלקות – מדויקים מ-Google Ads.';
   } else {
     const k = state.key==='custom' ? null : state.key;
     const demo = k && D.liDemo && D.liDemo[k];

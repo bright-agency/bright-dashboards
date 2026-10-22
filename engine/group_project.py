@@ -300,6 +300,7 @@ def build(client: dict, raw: dict, fx, generated: str, budgets: dict = None) -> 
     breakdown("meta_age", "meta_demo", "meta", lambda r: r.get("age") or "unknown")
     breakdown("meta_gender", "meta_demo", "meta", lambda r: r.get("gender") or "unknown")
     breakdown("google_device", "g_device", "google", lambda r: r.get("device") or "unknown")
+    breakdown("google_network", "g_network", "google", lambda r: r.get("ad_network_type") or "unknown")
 
     li_demo = {}
     for key, payload in (raw.get("li_demo") or {}).items():
@@ -354,7 +355,7 @@ def build(client: dict, raw: dict, fx, generated: str, budgets: dict = None) -> 
     return {
         "meta": {"client": CONFIG.get("name"), "slug": CONFIG.get("slug"), "generated": generated, "asOf": client["asOf"],
                  "currency": "ILS", "detailFrom": detail_from, "presets": client["presets"], "schema": 2, "mode": "project",
-                 "single": not PROJECTS, "label": G.get("label"), "validLeads": valid_mode, "kpi": kp, "month": month, "leadsUnassigned": unmatched,
+                 "single": not PROJECTS, "label": G.get("label"), "unitPlatforms": CONFIG.get("team", {}).get("unit_platforms"), "validLeads": valid_mode, "kpi": kp, "month": month, "leadsUnassigned": unmatched,
                  "platforms": client["client"]["platforms"]},
         "days": day_list, "courses": groups, "campaigns": campaigns, "rows": rows, "leadRows": lead_rows,
         "valRows": val_rows, "units": units.items, "unitRows": unit_rows, "dims": dims, "breakdowns": bd,
